@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 const links = [
   { to: "/", label: "Home" },
+  { to: "/learn", label: "Learn" },
   { to: "/compare", label: "Compare" },
   { to: "/use-cases", label: "Use Cases" },
   { to: "/decisions", label: "Decisions" },
@@ -20,15 +21,15 @@ export function NavBar() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1 text-sm">
+        <nav className="flex items-center gap-0.5 text-sm">
           {links.map((l) => (
             <Link
               key={l.to}
               to={l.to}
-              className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground transition-colors"
+              className="px-2.5 sm:px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground transition-colors text-xs sm:text-sm"
               activeProps={{
                 className:
-                  "px-3 py-1.5 rounded-md text-foreground bg-secondary/60",
+                  "px-2.5 sm:px-3 py-1.5 rounded-md text-foreground bg-secondary/60 text-xs sm:text-sm",
               }}
               activeOptions={{ exact: l.to === "/" }}
             >

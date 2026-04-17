@@ -13,7 +13,10 @@ export function UseCaseCard({ useCase, onOpen }: Props) {
       onClick={() => onOpen(useCase.id)}
       className="premium-card group p-6 text-left h-full flex flex-col"
     >
-      <div className="editorial-eyebrow mb-2">Use Case</div>
+      <div className="flex items-center justify-between mb-2">
+        <div className="editorial-eyebrow">Use Case</div>
+        <TagPill tone="outline">{useCase.recommendedAgentType}</TagPill>
+      </div>
       <h3 className="text-lg font-medium text-foreground">{useCase.title}</h3>
       <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
         {useCase.summary}
