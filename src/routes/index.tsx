@@ -78,16 +78,22 @@ function HomePage() {
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
-              to="/compare"
+              to="/learn"
               className="inline-flex items-center gap-2 rounded-md bg-amber px-5 py-2.5 text-sm font-medium text-amber-foreground hover:bg-amber/90 transition-colors shadow-[0_0_60px_-10px_var(--color-amber)]"
             >
-              Explore Comparisons <ArrowRight className="h-4 w-4" />
+              Start learning <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/compare"
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary/40 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+            >
+              Compare paths
             </Link>
             <Link
               to="/use-cases"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary/40 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+              className="inline-flex items-center gap-2 rounded-md text-muted-foreground hover:text-foreground px-3 py-2.5 text-sm font-medium transition-colors"
             >
-              Browse Use Cases
+              Browse use cases
             </Link>
           </div>
         </div>
