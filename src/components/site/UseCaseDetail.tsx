@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { TagPill } from "./TagPill";
 import { LearningReferenceList } from "./LearningReferenceList";
+import { learnModules } from "@/data/learnModules";
 
 type Props = {
   useCase: UseCase | null;
@@ -31,6 +32,7 @@ export function UseCaseDetail({ useCase, onClose }: Props) {
             </DialogHeader>
 
             <div className="mt-2 flex flex-wrap gap-2">
+              <TagPill tone="outline">Agent: {useCase.recommendedAgentType}</TagPill>
               <TagPill tone="amber">PoC: {useCase.pocFit}</TagPill>
               <TagPill tone="amber">Prod: {useCase.productionFit}</TagPill>
               <TagPill tone="amber">React: {useCase.reactFit}</TagPill>
@@ -47,9 +49,39 @@ export function UseCaseDetail({ useCase, onClose }: Props) {
               <Block label="Key risks & tradeoffs" value={useCase.risks} />
             </div>
 
+            {useCase.relatedModuleIds.length > 0 && (
+              <div className="mt-8">
+                <div className="editorial-eyebrow mb-3">Related learning modules</div>
+                <ul className="divide-y divide-border border-y border-border">
+                  {useCase.relatedModuleIds.map((id) => {
+                    const m = learnModules.find((x) => x.id === id);
+                    if (!m) return null;
+                    return (
+                      <li key={id}>
+                        <a
+                          href={`/learn#${m.id}`}
+                          className="block py-3 text-sm text-foreground hover:text-amber transition-colors"
+                        >
+                          {m.title}
+                          <span className="block text-xs text-muted-foreground mt-0.5">
+                            {m.summary.length > 110
+                              ? m.summary.slice(0, 110) + "…"
+                              : m.summary}
+                          </span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+
             {useCase.learningReferenceIds.length > 0 && (
               <div className="mt-8">
-                <LearningReferenceList ids={useCase.learningReferenceIds} />
+                <LearningReferenceList
+                  ids={useCase.learningReferenceIds}
+                  title="Official references"
+                />
               </div>
             )}
           </>

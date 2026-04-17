@@ -21,14 +21,20 @@ export type Comparison = {
   leftEyebrow: string;
   rightEyebrow: string;
   criteria: ComparisonCriterion[];
+  bestWhenLeft: string;
+  bestWhenRight: string;
+  likelyFirstMove: string;
   learningReferenceIds: string[];
 };
+
+export type AgentType = "Declarative" | "Custom Engine" | "Mixed" | "Depends";
 
 export type UseCase = {
   id: string;
   title: string;
   summary: string;
   recommendedPath: string;
+  recommendedAgentType: AgentType;
   pocFit: string;
   productionFit: string;
   reactFit: string;
@@ -37,21 +43,36 @@ export type UseCase = {
   productionShape: string;
   reactAngle: string;
   risks: string;
+  relatedModuleIds: string[];
   learningReferenceIds: string[];
 };
 
 export const learningReferences: LearningReference[] = [
   {
-    id: "m365-agents-overview",
+    id: "agents-overview",
     title: "Microsoft 365 Copilot agents overview",
-    summary: "What agents are inside M365 Copilot and how they extend the host experience.",
-    category: "M365 Copilot",
+    summary: "What agents are, the two main approaches, and where they fit in the Copilot ecosystem.",
+    category: "Agents",
     href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/overview-agents",
+  },
+  {
+    id: "declarative-agents",
+    title: "Declarative agents",
+    summary: "Tailor M365 Copilot using instructions, knowledge, and actions on Microsoft's orchestrator and models.",
+    category: "Declarative",
+    href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/overview-declarative-agent",
+  },
+  {
+    id: "custom-engine-agents",
+    title: "Custom engine agents",
+    summary: "Bring your own orchestration and AI services for advanced, full-stack agent scenarios.",
+    category: "Custom Engine",
+    href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/overview-custom-engine-agent",
   },
   {
     id: "agent-builder",
     title: "Agent Builder overview",
-    summary: "Lightweight, no-code agent creation directly inside Microsoft 365 Copilot.",
+    summary: "In-context, no-code authoring for declarative agents inside Microsoft 365 Copilot.",
     category: "M365 Copilot",
     href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/agent-builder",
   },
@@ -70,37 +91,65 @@ export const learningReferences: LearningReference[] = [
     href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/agent-templates",
   },
   {
+    id: "studio-guidance",
+    title: "Copilot Studio guidance hub",
+    summary: "End-to-end guidance: planning, design, architecture, RAG, orchestration, channels, testing, analytics, governance.",
+    category: "Copilot Studio",
+    href: "https://learn.microsoft.com/microsoft-copilot-studio/guidance/",
+  },
+  {
     id: "studio-publishing",
-    title: "Copilot Studio publishing & channels",
-    summary: "How to publish agents to Teams, web, custom apps, and other surfaces.",
+    title: "Publishing & channels",
+    summary: "Publish agents to Teams, web, custom apps, and other surfaces.",
     category: "Copilot Studio",
     href: "https://learn.microsoft.com/microsoft-copilot-studio/publication-fundamentals-publish-channels",
   },
   {
     id: "studio-custom-app",
-    title: "Studio: website & custom app integration",
-    summary: "Embed Copilot Studio agents into your own React or web application.",
+    title: "Embed in a website or custom app",
+    summary: "Connect Copilot Studio agents to your own React or web application.",
     category: "Copilot Studio",
     href: "https://learn.microsoft.com/microsoft-copilot-studio/publication-connect-bot-to-custom-application",
   },
   {
     id: "generative-orchestration",
     title: "Generative orchestration",
-    summary: "Let the model dynamically choose tools, topics, and knowledge to answer.",
+    summary: "Let the model dynamically choose topics, tools, knowledge, and child agents to answer.",
     category: "Copilot Studio",
     href: "https://learn.microsoft.com/microsoft-copilot-studio/advanced-generative-actions",
   },
   {
+    id: "studio-tools",
+    title: "Agent tools",
+    summary: "Tools let agents take real actions — connectors, prompts, flows, custom code.",
+    category: "Copilot Studio",
+    href: "https://learn.microsoft.com/microsoft-copilot-studio/advanced-plugins",
+  },
+  {
     id: "studio-testing",
-    title: "Testing in Copilot Studio",
+    title: "Testing & evaluation",
     summary: "Test pane, conversation traces, and evaluation flow for Studio agents.",
     category: "Copilot Studio",
     href: "https://learn.microsoft.com/microsoft-copilot-studio/authoring-test-pane",
   },
   {
+    id: "studio-analytics",
+    title: "Analytics & improvement",
+    summary: "Use analytics to understand usage, find gaps, and improve agent performance.",
+    category: "Copilot Studio",
+    href: "https://learn.microsoft.com/microsoft-copilot-studio/analytics-overview",
+  },
+  {
+    id: "agents-sdk",
+    title: "Microsoft 365 Agents SDK",
+    summary: "Pro-code SDK for building custom engine agents and multi-channel experiences.",
+    category: "Custom Engine",
+    href: "https://learn.microsoft.com/microsoft-365/agents-sdk/",
+  },
+  {
     id: "m365-admin-basics",
-    title: "M365 agents admin basics",
-    summary: "Governance, lifecycle, and admin controls for agents across the tenant.",
+    title: "Agents admin & governance",
+    summary: "Lifecycle, controls, and governance for agents across the tenant.",
     category: "Admin",
     href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/manage",
   },
@@ -108,36 +157,43 @@ export const learningReferences: LearningReference[] = [
 
 export const comparisons: Comparison[] = [
   {
-    id: "m365-vs-studio",
-    title: "Microsoft 365 Copilot vs Copilot Studio",
+    id: "builder-vs-studio",
+    title: "Agent Builder vs Copilot Studio",
     summary:
-      "Where the intelligence lives — and how much control you really need over it.",
-    leftEyebrow: "Lightweight · Native",
-    rightEyebrow: "Structured · Extensible",
-    leftTitle: "Microsoft 365 Copilot / Agent Builder",
+      "Both build declarative-style agents. One stays inside M365 Copilot. The other gives you the full platform.",
+    leftEyebrow: "In-context · Lightweight",
+    rightEyebrow: "Platform · Operational",
+    leftTitle: "Agent Builder",
     rightTitle: "Copilot Studio",
     criteria: [
       {
+        label: "What it is",
+        leftValue:
+          "A no-code authoring surface inside Microsoft 365 Copilot for building declarative agents fast.",
+        rightValue:
+          "A full agent platform: planning, orchestration, tools, channels, testing, analytics, governance.",
+      },
+      {
         label: "Best for",
         leftValue:
-          "Quick exploration, Microsoft-native workflows, lightweight internal assistants.",
+          "Quick learning, fast prototyping, lightweight Microsoft-native assistants.",
         rightValue:
-          "Structured agents, broader rollout, deeper workflows, serious builds.",
+          "Structured, multi-step, multi-channel agents with real lifecycle needs.",
       },
       {
         label: "Less ideal for",
-        leftValue: "Custom UX, complex orchestration, cross-system workflows.",
-        rightValue: "Throwaway demos that only need a few prompts and a doc set.",
+        leftValue: "Broader product experiences, advanced operational scenarios.",
+        rightValue: "Throwaway demos that only need a prompt and a doc set.",
       },
       {
         label: "Speed to prototype",
-        leftValue: "Very fast — minutes to a usable agent inside Copilot.",
+        leftValue: "Minutes — directly inside the Copilot UI.",
         rightValue: "Fast, but with more setup, topics, and authoring overhead.",
       },
       {
         label: "Control & flexibility",
-        leftValue: "Limited — you live inside the M365 Copilot frame.",
-        rightValue: "High — topics, tools, knowledge, orchestration, channels.",
+        leftValue: "Limited — declarative building blocks only.",
+        rightValue: "High — topics, tools, knowledge, generative orchestration, child agents.",
       },
       {
         label: "UX flexibility",
@@ -145,120 +201,238 @@ export const comparisons: Comparison[] = [
         rightValue: "Channel-dependent; embed in custom apps for richer UX.",
       },
       {
-        label: "Production readiness",
-        leftValue: "Good for internal, narrow scopes.",
-        rightValue: "Stronger story for governance, testing, lifecycle.",
+        label: "Rollout & publishing",
+        leftValue: "Lives inside M365 Copilot for the people who can see it.",
+        rightValue: "Multiple channels: Teams, web, custom apps, voice.",
       },
       {
-        label: "React app relevance",
-        leftValue: "Low — designed to live inside Microsoft surfaces.",
-        rightValue: "High — can be embedded into custom React experiences.",
+        label: "Production readiness",
+        leftValue: "Good for narrow internal scopes.",
+        rightValue: "Stronger story for testing, analytics, governance, lifecycle.",
+      },
+      {
+        label: "Engineering effort",
+        leftValue: "Almost none — configuration over code.",
+        rightValue: "Moderate — authoring, possibly tools, channels, and integration work.",
       },
     ],
+    bestWhenLeft:
+      "You want to learn fast, prototype an internal helper, or stay inside Microsoft 365.",
+    bestWhenRight:
+      "The idea is becoming structured, multi-step, or needs to be owned and rolled out.",
+    likelyFirstMove:
+      "Start in Agent Builder to learn the shape. Move to Copilot Studio when you need orchestration, tools, or channels.",
     learningReferenceIds: [
-      "m365-agents-overview",
       "agent-builder",
+      "studio-guidance",
       "choosing-builder-vs-studio",
       "studio-publishing",
     ],
   },
   {
-    id: "poc-vs-production",
-    title: "PoC vs Production",
+    id: "declarative-vs-custom",
+    title: "Declarative vs Custom Engine",
     summary:
-      "The same idea, judged by very different rules. Knowing which mode you're in changes everything.",
-    leftEyebrow: "Validate · Move fast",
-    rightEyebrow: "Own · Sustain",
-    leftTitle: "PoC Mode",
-    rightTitle: "Production Mode",
+      "Two architectural approaches to Microsoft 365 Copilot agents. One leans on Microsoft. The other lets you bring your own.",
+    leftEyebrow: "Microsoft-native",
+    rightEyebrow: "Pro-code · Flexible",
+    leftTitle: "Declarative agents",
+    rightTitle: "Custom engine agents",
     criteria: [
       {
-        label: "Main goal",
-        leftValue: "Prove a small, sharp idea is worth pursuing.",
-        rightValue: "Deliver a reliable experience people depend on.",
-      },
-      {
-        label: "What matters most",
-        leftValue: "Demoability, narrow scope, fast iteration.",
-        rightValue: "Reliability, ownership, repeatable behaviour.",
-      },
-      {
-        label: "Acceptable shortcuts",
-        leftValue: "Hard-coded data, narrow prompts, rough edges in UX.",
+        label: "What it is",
+        leftValue:
+          "Instructions + knowledge + actions, running on Copilot's orchestrator and models.",
         rightValue:
-          "Very few — shortcuts now become incidents and rewrites later.",
+          "Bring your own orchestration, models, and integration architecture.",
       },
       {
-        label: "Risky to ignore",
-        leftValue: "Asking real users, capturing the actual use moment.",
-        rightValue: "Evaluation, edge cases, data boundaries, observability.",
+        label: "Best for",
+        leftValue:
+          "Microsoft-native scenarios, lightweight to moderately structured business cases.",
+        rightValue:
+          "Advanced control, custom orchestration, multi-channel, full-stack scenarios.",
       },
       {
-        label: "UX expectations",
-        leftValue: "Good enough to feel the idea; not pixel-perfect.",
-        rightValue: "Considered, role-aware, predictable, accessible.",
+        label: "Less ideal for",
+        leftValue: "Deep control over models, orchestration, or architecture.",
+        rightValue: "Cases where speed and simplicity beat flexibility.",
       },
       {
-        label: "Engineering expectations",
-        leftValue: "Throwaway-grade code is fine if learning is real.",
-        rightValue: "Tests, infra, monitoring, deployment hygiene.",
+        label: "Speed to prototype",
+        leftValue: "Very fast — Microsoft does the heavy lifting.",
+        rightValue: "Slower — you own more of the stack.",
       },
       {
-        label: "Delivery mindset",
-        leftValue: "Ship something rough today, learn tomorrow.",
-        rightValue: "Ship something owned this quarter, support it next year.",
+        label: "Control & flexibility",
+        leftValue: "Bounded by the declarative surface.",
+        rightValue: "Wide — model choice, orchestration logic, integrations.",
+      },
+      {
+        label: "UX flexibility",
+        leftValue: "Lives inside Microsoft surfaces by default.",
+        rightValue: "Can be embedded anywhere your engineering reaches.",
+      },
+      {
+        label: "Rollout & publishing",
+        leftValue: "Through M365 Copilot and Studio channels.",
+        rightValue: "Anywhere you can ship code — Teams, web, mobile, custom.",
+      },
+      {
+        label: "Production readiness",
+        leftValue: "Strong for Microsoft-shaped workflows.",
+        rightValue: "Strong when you want full ownership of the experience.",
+      },
+      {
+        label: "Engineering effort",
+        leftValue: "Low — configuration and authoring.",
+        rightValue: "High — real backend, orchestration, observability work.",
       },
     ],
-    learningReferenceIds: ["studio-testing", "generative-orchestration"],
+    bestWhenLeft:
+      "The work belongs inside Microsoft 365 and you want speed and a maintained orchestrator.",
+    bestWhenRight:
+      "You need control over models, orchestration, or integrations the declarative path can't give you.",
+    likelyFirstMove:
+      "Default to declarative. Only adopt custom engine when a specific limitation forces it.",
+    learningReferenceIds: [
+      "declarative-agents",
+      "custom-engine-agents",
+      "agents-overview",
+      "agents-sdk",
+    ],
   },
   {
     id: "native-vs-react",
-    title: "Microsoft-native vs React app experience",
+    title: "Microsoft-native vs React app shell",
     summary:
       "Where should the experience actually live — inside the user's existing flow, or inside your own product?",
     leftEyebrow: "Inside the workflow",
     rightEyebrow: "Inside the product",
     leftTitle: "Microsoft-native experience",
-    rightTitle: "React app experience",
+    rightTitle: "React app shell",
     criteria: [
       {
-        label: "When it makes sense",
+        label: "What it is",
         leftValue:
-          "The work already happens in Teams, Outlook, Word, SharePoint.",
+          "The agent lives in Teams, Outlook, Word, SharePoint — wherever the user already is.",
         rightValue:
-          "UX matters deeply and the assistant is one part of a broader product.",
+          "The agent is one feature inside a custom app you design and own end-to-end.",
       },
       {
-        label: "UX strengths",
-        leftValue: "Familiar surface, zero onboarding, available where users are.",
+        label: "Best for",
+        leftValue:
+          "Work that already happens in Microsoft 365 day-to-day.",
         rightValue:
-          "Full control of layout, journey, role-aware states, custom flows.",
+          "Dashboards, workflow tools, training, role-aware copilots inside a broader product.",
       },
       {
-        label: "UX limitations",
+        label: "Less ideal for",
+        leftValue: "Cases where UX is the product and needs full control.",
+        rightValue: "Quick internal helpers that don't justify a custom app.",
+      },
+      {
+        label: "Speed to prototype",
+        leftValue: "Very fast — no app shell to build.",
+        rightValue: "Slower — you build the surrounding product too.",
+      },
+      {
+        label: "Control & flexibility",
         leftValue: "Constrained by the host app's chrome and patterns.",
-        rightValue: "You own everything — including the things you'd rather not.",
+        rightValue: "Full — layout, journey, role state, custom flows.",
       },
       {
-        label: "Best use cases",
-        leftValue: "Internal Q&A, quick lookups, lightweight assistants.",
-        rightValue:
-          "Dashboards, workflow tools, training, role-specific copilots.",
+        label: "UX flexibility",
+        leftValue: "Familiar surface, zero onboarding.",
+        rightValue: "You own everything — including the parts you'd rather not.",
       },
       {
-        label: "Engineering implications",
+        label: "Rollout & publishing",
+        leftValue: "Tenant-scoped, governed by M365 admin patterns.",
+        rightValue: "Your own deployment, auth, and tenancy story.",
+      },
+      {
+        label: "Production readiness",
+        leftValue: "Inherits Microsoft's platform maturity.",
+        rightValue: "Depends entirely on what your team builds and operates.",
+      },
+      {
+        label: "Engineering effort",
         leftValue: "Configuration over code; less infra to own.",
-        rightValue:
-          "Real frontend work, auth, state, embedding agents, API surface.",
-      },
-      {
-        label: "How copilots fit",
-        leftValue: "The host *is* the copilot; you extend it with agents.",
-        rightValue:
-          "Embed Studio agents or custom models as one feature among many.",
+        rightValue: "Real frontend, auth, state, embedding, API surface.",
       },
     ],
-    learningReferenceIds: ["studio-custom-app", "studio-publishing"],
+    bestWhenLeft:
+      "The workflow already lives in Microsoft 365 and the assistant should stay light.",
+    bestWhenRight:
+      "UX matters deeply and the assistant is one part of a broader product experience.",
+    likelyFirstMove:
+      "Pilot inside Microsoft 365 if the work happens there. Build a React shell when the broader product is the point.",
+    learningReferenceIds: ["studio-custom-app", "studio-publishing", "agents-sdk"],
+  },
+  {
+    id: "poc-vs-production",
+    title: "PoC vs Production",
+    summary:
+      "Not a product comparison — a delivery lens. Knowing which mode you're in changes every choice.",
+    leftEyebrow: "Validate · Move fast",
+    rightEyebrow: "Own · Sustain",
+    leftTitle: "PoC mode",
+    rightTitle: "Production mode",
+    criteria: [
+      {
+        label: "What it is",
+        leftValue: "A small, sharp build aimed at proving a single idea is worth pursuing.",
+        rightValue: "A real product slice people will rely on and you will support.",
+      },
+      {
+        label: "Best for",
+        leftValue: "Demoability, narrow scope, fast iteration, real user reactions.",
+        rightValue: "Reliability, ownership, repeatable behaviour, supportability.",
+      },
+      {
+        label: "Less ideal for",
+        leftValue: "Anything you'll quietly hand to real users next quarter.",
+        rightValue: "Disposable explorations or speculative ideas.",
+      },
+      {
+        label: "Speed to prototype",
+        leftValue: "Maximum — shortcuts are the point.",
+        rightValue: "Deliberate — speed traded for soundness.",
+      },
+      {
+        label: "Control & flexibility",
+        leftValue: "Hard-coded data, narrow prompts, rough edges in UX.",
+        rightValue: "Considered, role-aware, predictable, accessible.",
+      },
+      {
+        label: "UX flexibility",
+        leftValue: "Good enough to feel the idea; not pixel-perfect.",
+        rightValue: "Cohesive, role-aware, supportable.",
+      },
+      {
+        label: "Rollout & publishing",
+        leftValue: "A few invited users, scripted flow, manual fallback.",
+        rightValue: "Real channel strategy, lifecycle, comms, support model.",
+      },
+      {
+        label: "Production readiness",
+        leftValue: "Throwaway-grade is fine if learning is real.",
+        rightValue: "Tests, infra, monitoring, deployment hygiene.",
+      },
+      {
+        label: "Engineering effort",
+        leftValue: "Lowest acceptable to learn the thing.",
+        rightValue: "What it actually takes to own the thing.",
+      },
+    ],
+    bestWhenLeft:
+      "You don't yet know if the idea is worth building, and a small build will tell you.",
+    bestWhenRight:
+      "You already know it works and people now depend on it.",
+    likelyFirstMove:
+      "Name the mode out loud. Most failed builds happen when one mode is judged by the other's rules.",
+    learningReferenceIds: ["studio-testing", "studio-analytics", "generative-orchestration"],
   },
 ];
 
@@ -268,11 +442,12 @@ export const useCases: UseCase[] = [
     title: "Internal knowledge assistant",
     summary:
       "A small, trustworthy way for a team to ask questions over a known set of docs.",
-    recommendedPath: "Microsoft 365 Copilot first",
+    recommendedPath: "Agent Builder or Microsoft-native declarative route first",
+    recommendedAgentType: "Declarative",
     pocFit: "Excellent",
     productionFit: "Good",
     reactFit: "Optional",
-    why: "Fast knowledge retrieval and lightweight internal assistance — exactly what M365 Copilot agents are shaped for.",
+    why: "Strong fit for quick knowledge retrieval and internal assistance — and a great early case to learn instructions + knowledge + actions.",
     pocShape:
       "Narrow document set, simple Q&A, small audience, minimal grounding rules.",
     productionShape:
@@ -281,18 +456,20 @@ export const useCases: UseCase[] = [
       "Only needed if it becomes part of a wider internal tool with its own UX and navigation.",
     risks:
       "Scope creep, stale content, weak evaluation, blurry boundaries on what the assistant should and shouldn't know.",
-    learningReferenceIds: ["m365-agents-overview", "agent-builder", "agent-templates"],
+    relatedModuleIds: ["declarative", "agent-builder", "knowledge-instructions-actions"],
+    learningReferenceIds: ["agents-overview", "declarative-agents", "agent-builder", "agent-templates"],
   },
   {
     id: "training-assistant",
     title: "Training assistant",
     summary:
-      "Helps someone learn a topic, a tool, or an internal process — with structure, not just chat.",
-    recommendedPath: "Copilot Studio or React app + copilot layer",
+      "Helps someone learn a topic, tool, or internal process — with structure, not just chat.",
+    recommendedPath: "Copilot Studio or React app + agent layer",
+    recommendedAgentType: "Declarative",
     pocFit: "Good",
     productionFit: "Strong with structure",
     reactFit: "Strong",
-    why: "Training usually needs more structure than a simple chat helper — guided flow, progress, role context.",
+    why: "Training usually needs more structure, progression, and stronger UX than a chat helper alone can provide.",
     pocShape:
       "Guided lesson flow, narrow content scope, a few core interactions to feel the loop.",
     productionShape:
@@ -301,7 +478,8 @@ export const useCases: UseCase[] = [
       "Strong fit when training is part of a broader app — onboarding, certification, skills tracking.",
     risks:
       "Treating it as 'just a chatbot' and missing the structure that makes training actually work.",
-    learningReferenceIds: ["studio-custom-app", "generative-orchestration"],
+    relatedModuleIds: ["studio", "topics-tools-children", "react-shell"],
+    learningReferenceIds: ["studio-guidance", "studio-custom-app", "generative-orchestration"],
   },
   {
     id: "workflow-assistant",
@@ -309,10 +487,11 @@ export const useCases: UseCase[] = [
     summary:
       "Helps a user complete a real task — request, approval, status update, structured action.",
     recommendedPath: "Copilot Studio",
+    recommendedAgentType: "Declarative",
     pocFit: "Good",
     productionFit: "Strong",
     reactFit: "Useful",
-    why: "Workflow ideas almost always need controlled interaction paths, tools, and consistent behaviour.",
+    why: "Workflow ideas almost always need controlled interaction paths, tools, orchestration, and consistent behaviour.",
     pocShape:
       "One or two simple tasks, narrow flow, light orchestration, happy-path only.",
     productionShape:
@@ -321,9 +500,11 @@ export const useCases: UseCase[] = [
       "Useful when workflows involve steps, forms, approvals, task states, or dashboards.",
     risks:
       "Over-trusting freeform generation in a place that really needs structured tools and validations.",
+    relatedModuleIds: ["studio", "generative-orchestration", "topics-tools-children", "testing-analytics"],
     learningReferenceIds: [
+      "studio-guidance",
       "generative-orchestration",
-      "studio-publishing",
+      "studio-tools",
       "studio-testing",
     ],
   },
@@ -332,11 +513,12 @@ export const useCases: UseCase[] = [
     title: "Support triage assistant",
     summary:
       "Suggests answers, classifies tickets, and helps route incoming support work.",
-    recommendedPath: "M365 Copilot to explore, Copilot Studio for a real version",
+    recommendedPath: "Agent Builder for exploration, Copilot Studio for the real version",
+    recommendedAgentType: "Declarative",
     pocFit: "Excellent",
     productionFit: "Strong with structure",
     reactFit: "Good in a console",
-    why: "Starts simple but becomes operational quickly — once people rely on it, it needs proper edges.",
+    why: "Starts simple, becomes operational quickly — once people rely on it, it needs proper edges.",
     pocShape:
       "Triage suggestions, common FAQ support, lightweight routing logic, manual fallback.",
     productionShape:
@@ -345,10 +527,12 @@ export const useCases: UseCase[] = [
       "Good when support is embedded into a wider console or internal tool.",
     risks:
       "Silent misclassification, broken escalation paths, no review loop on what the assistant suggested.",
+    relatedModuleIds: ["agent-builder", "studio", "testing-analytics"],
     learningReferenceIds: [
       "agent-builder",
       "choosing-builder-vs-studio",
       "studio-testing",
+      "studio-analytics",
     ],
   },
   {
@@ -356,11 +540,12 @@ export const useCases: UseCase[] = [
     title: "Dashboard companion",
     summary:
       "An assistant that lives next to charts and metrics, helping users make sense of what they're seeing.",
-    recommendedPath: "React app with copilot layer",
+    recommendedPath: "React app shell + agent layer",
+    recommendedAgentType: "Depends",
     pocFit: "Good",
     productionFit: "Strong",
     reactFit: "Essential",
-    why: "The dashboard is the product; the assistant supports it. That dynamic doesn't fit inside a host Copilot UI.",
+    why: "The dashboard is the product. The assistant supports it. That dynamic doesn't fit inside a host Copilot UI.",
     pocShape:
       "Assistant beside a few charts, predefined prompts, suggested insights, narrow context.",
     productionShape:
@@ -369,7 +554,8 @@ export const useCases: UseCase[] = [
       "Essential or near-essential — the surrounding UI is the whole point.",
     risks:
       "Generic 'chat-on-the-side' that doesn't actually understand what the user is looking at.",
-    learningReferenceIds: ["studio-custom-app", "generative-orchestration"],
+    relatedModuleIds: ["react-shell", "custom-engine", "generative-orchestration"],
+    learningReferenceIds: ["studio-custom-app", "generative-orchestration", "agents-sdk"],
   },
   {
     id: "research-copilot",
@@ -377,10 +563,11 @@ export const useCases: UseCase[] = [
     summary:
       "Helps with summarising sources, comparing options, and turning rough notes into structured outputs.",
     recommendedPath: "Depends on where the work happens",
+    recommendedAgentType: "Depends",
     pocFit: "Excellent",
     productionFit: "Good with structure",
     reactFit: "Useful",
-    why: "Flexible — fits inside Microsoft surfaces for fast value, or inside a custom app when outputs need state.",
+    why: "Flexible — fits inside Microsoft surfaces for fast value, or inside a custom app when outputs need state and review.",
     pocShape:
       "Quick summaries, narrow sources, fast iteration, single-user feel.",
     productionShape:
@@ -389,7 +576,8 @@ export const useCases: UseCase[] = [
       "Useful when outputs need saved state, comparisons, review queues, or navigation.",
     risks:
       "Confident summaries over weak sources; no traceability back to what was actually read.",
-    learningReferenceIds: ["m365-agents-overview", "studio-custom-app"],
+    relatedModuleIds: ["declarative", "custom-engine", "react-shell"],
+    learningReferenceIds: ["agents-overview", "declarative-agents", "studio-custom-app"],
   },
 ];
 

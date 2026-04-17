@@ -25,18 +25,26 @@ export const Route = createFileRoute("/")({
 
 const intros = [
   {
-    eyebrow: "Path",
-    title: "M365 Copilot",
+    eyebrow: "Approach",
+    title: "Declarative agents",
     description:
-      "The Microsoft-native surface — fastest path to a working assistant inside familiar tools.",
-    symbol: "M",
-    to: "/compare" as const,
+      "Instructions, knowledge, and actions on Microsoft's orchestrator and models — the native path.",
+    symbol: "D",
+    to: "/learn" as const,
   },
   {
-    eyebrow: "Path",
-    title: "Copilot Studio",
+    eyebrow: "Approach",
+    title: "Custom engine agents",
     description:
-      "More structure, more control, more rollout options when the idea starts to feel real.",
+      "Bring your own orchestration and models when you need full control over the stack.",
+    symbol: "C",
+    to: "/learn" as const,
+  },
+  {
+    eyebrow: "Tools",
+    title: "Builder & Studio",
+    description:
+      "Agent Builder for fast learning. Copilot Studio for structure, channels, and operations.",
     symbol: "S",
     to: "/compare" as const,
   },
@@ -44,16 +52,8 @@ const intros = [
     eyebrow: "Lens",
     title: "PoC vs Production",
     description:
-      "Same idea, different rules. Knowing which mode you're in changes every choice.",
+      "Same idea, different rules. Naming the mode you're in changes every choice.",
     symbol: "↔",
-    to: "/compare" as const,
-  },
-  {
-    eyebrow: "Path",
-    title: "React App Integration",
-    description:
-      "When UX is the product and the assistant is one part of a larger journey.",
-    symbol: "R",
     to: "/compare" as const,
   },
 ];
@@ -78,16 +78,22 @@ function HomePage() {
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
-              to="/compare"
+              to="/learn"
               className="inline-flex items-center gap-2 rounded-md bg-amber px-5 py-2.5 text-sm font-medium text-amber-foreground hover:bg-amber/90 transition-colors shadow-[0_0_60px_-10px_var(--color-amber)]"
             >
-              Explore Comparisons <ArrowRight className="h-4 w-4" />
+              Start learning <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/compare"
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary/40 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+            >
+              Compare paths
             </Link>
             <Link
               to="/use-cases"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary/40 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+              className="inline-flex items-center gap-2 rounded-md text-muted-foreground hover:text-foreground px-3 py-2.5 text-sm font-medium transition-colors"
             >
-              Browse Use Cases
+              Browse use cases
             </Link>
           </div>
         </div>

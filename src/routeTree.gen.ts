@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UseCasesRouteImport } from './routes/use-cases'
+import { Route as LearnRouteImport } from './routes/learn'
 import { Route as DecisionsRouteImport } from './routes/decisions'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,6 +18,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const UseCasesRoute = UseCasesRouteImport.update({
   id: '/use-cases',
   path: '/use-cases',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DecisionsRoute = DecisionsRouteImport.update({
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
+  '/learn': typeof LearnRoute
   '/use-cases': typeof UseCasesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
+  '/learn': typeof LearnRoute
   '/use-cases': typeof UseCasesRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
+  '/learn': typeof LearnRoute
   '/use-cases': typeof UseCasesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/compare' | '/decisions' | '/use-cases'
+  fullPaths: '/' | '/compare' | '/decisions' | '/learn' | '/use-cases'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/compare' | '/decisions' | '/use-cases'
-  id: '__root__' | '/' | '/compare' | '/decisions' | '/use-cases'
+  to: '/' | '/compare' | '/decisions' | '/learn' | '/use-cases'
+  id: '__root__' | '/' | '/compare' | '/decisions' | '/learn' | '/use-cases'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CompareRoute: typeof CompareRoute
   DecisionsRoute: typeof DecisionsRoute
+  LearnRoute: typeof LearnRoute
   UseCasesRoute: typeof UseCasesRoute
 }
 
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/use-cases'
       fullPath: '/use-cases'
       preLoaderRoute: typeof UseCasesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/decisions': {
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CompareRoute: CompareRoute,
   DecisionsRoute: DecisionsRoute,
+  LearnRoute: LearnRoute,
   UseCasesRoute: UseCasesRoute,
 }
 export const routeTree = rootRouteImport
