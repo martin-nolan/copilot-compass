@@ -6,13 +6,13 @@ import { LearnModuleCard } from "@/components/site/LearnModuleCard";
 export const Route = createFileRoute("/learn")({
   head: () => ({
     meta: [
-      { title: "Learn — Copilot Pathways" },
+      { title: "Learn — Copilot Compass" },
       {
         name: "description",
         content:
           "A compact field guide to Microsoft Copilot agents: declarative vs custom engine, Agent Builder, Copilot Studio, orchestration, testing, and where React fits.",
       },
-      { property: "og:title", content: "Learn — Copilot Pathways" },
+      { property: "og:title", content: "Learn — Copilot Compass" },
       {
         property: "og:description",
         content:

@@ -31,14 +31,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Copilot Pathways — Choose the right Copilot path" },
+      { title: "Copilot Compass — Choose the right Copilot path" },
       {
         name: "description",
         content:
           "A premium personal field guide for Microsoft 365 Copilot, Copilot Studio, and React app integrations — for PoC and production decisions.",
       },
-      { name: "author", content: "Copilot Pathways" },
-      { property: "og:title", content: "Copilot Pathways" },
+      { name: "author", content: "Copilot Compass" },
+      { property: "og:title", content: "Copilot Compass" },
       {
         property: "og:description",
         content:

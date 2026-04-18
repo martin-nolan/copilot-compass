@@ -11,13 +11,13 @@ import { ArrowRight, Check, Compass } from "lucide-react";
 export const Route = createFileRoute("/choose-path")({
   head: () => ({
     meta: [
-      { title: "Choose a Path — Copilot Pathways" },
+      { title: "Choose a Path — Copilot Compass" },
       {
         name: "description",
         content:
           "Pick the right Copilot build path: fastest low-code, structured low-code, product-led React, or high-code custom engine.",
       },
-      { property: "og:title", content: "Choose a Path — Copilot Pathways" },
+      { property: "og:title", content: "Choose a Path — Copilot Compass" },
       {
         property: "og:description",
         content:

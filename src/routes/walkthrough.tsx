@@ -18,13 +18,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/walkthrough")({
   head: () => ({
     meta: [
-      { title: "Walkthrough — Copilot Pathways" },
+      { title: "Walkthrough — Copilot Compass" },
       {
         name: "description",
         content:
           "An interactive guided flow to figure out the right Copilot build path: low-code, structured low-code, React-led, or high-code.",
       },
-      { property: "og:title", content: "Walkthrough — Copilot Pathways" },
+      { property: "og:title", content: "Walkthrough — Copilot Compass" },
       {
         property: "og:description",
         content:

@@ -9,13 +9,13 @@ import { useLocalStore } from "@/hooks/useLocalStore";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Copilot Pathways — Decide what to build with Copilot" },
+      { title: "Copilot Compass — Decide what to build with Copilot" },
       {
         name: "description",
         content:
           "A premium decision and learning hub for choosing the right Copilot path: low-code, structured low-code, React-led, or high-code custom engine.",
       },
-      { property: "og:title", content: "Copilot Pathways" },
+      { property: "og:title", content: "Copilot Compass" },
       {
         property: "og:description",
         content:

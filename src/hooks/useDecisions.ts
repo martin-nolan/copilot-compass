@@ -17,7 +17,7 @@ export type Decision = {
   tags?: string[];
 };
 
-const KEY = "copilot-pathways:decisions:v1";
+const KEY = "copilot-compass:decisions:v1";
 
 export function useDecisions() {
   const [decisions, setDecisions] = useState<Decision[]>([]);

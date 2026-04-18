@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import type { PathId } from "@/data/paths";
 import type { Recommendation, Answers } from "@/data/walkthrough";
 
-const KEY = "copilot-pathways:store:v1";
+const KEY = "copilot-compass:store:v1";
 
 export type RecentItem = {
   type: "module" | "comparison" | "use-case" | "path" | "page";

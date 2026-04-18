@@ -6,13 +6,13 @@ import { ComparisonSection } from "@/components/site/ComparisonSection";
 export const Route = createFileRoute("/compare")({
   head: () => ({
     meta: [
-      { title: "Compare — Copilot Pathways" },
+      { title: "Compare — Copilot Compass" },
       {
         name: "description",
         content:
           "Side-by-side comparisons: Agent Builder vs Copilot Studio, Declarative vs Custom Engine, Microsoft-native vs React, PoC vs Production.",
       },
-      { property: "og:title", content: "Compare — Copilot Pathways" },
+      { property: "og:title", content: "Compare — Copilot Compass" },
       {
         property: "og:description",
         content:

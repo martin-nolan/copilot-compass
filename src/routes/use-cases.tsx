@@ -7,13 +7,13 @@ import { UseCaseDetail } from "@/components/site/UseCaseDetail";
 export const Route = createFileRoute("/use-cases")({
   head: () => ({
     meta: [
-      { title: "Use Cases — Copilot Pathways" },
+      { title: "Use Cases — Copilot Compass" },
       {
         name: "description",
         content:
           "Practical Copilot use cases — internal knowledge, training, workflows, support triage, dashboards, research.",
       },
-      { property: "og:title", content: "Use Cases — Copilot Pathways" },
+      { property: "og:title", content: "Use Cases — Copilot Compass" },
       {
         property: "og:description",
         content:

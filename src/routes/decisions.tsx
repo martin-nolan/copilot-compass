@@ -12,13 +12,13 @@ import { useLocalStore } from "@/hooks/useLocalStore";
 export const Route = createFileRoute("/decisions")({
   head: () => ({
     meta: [
-      { title: "Decisions — Copilot Pathways" },
+      { title: "Decisions — Copilot Compass" },
       {
         name: "description",
         content:
           "Capture personal Copilot implementation decisions — chosen path, agent type, PoC and production notes, and what to learn next.",
       },
-      { property: "og:title", content: "Decisions — Copilot Pathways" },
+      { property: "og:title", content: "Decisions — Copilot Compass" },
       {
         property: "og:description",
         content:
@@ -59,7 +59,7 @@ function DecisionsPage() {
     );
     const a = document.createElement("a");
     a.href = url;
-    a.download = `copilot-pathways-export-${Date.now()}.json`;
+    a.download = `copilot-compass-export-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
     flash("Exported");

@@ -19,7 +19,7 @@ export function NavBar() {
             <span className="h-2 w-2 rounded-sm bg-background" />
           </span>
           <span className="text-sm font-medium tracking-tight whitespace-nowrap">
-            Copilot <span className="text-muted-foreground">Pathways</span>
+            Copilot <span className="text-muted-foreground">Compass</span>
           </span>
         </Link>
 
