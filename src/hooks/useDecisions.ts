@@ -57,22 +57,32 @@ export function useDecisions() {
     setDecisions((prev) =>
       prev.map((decision) =>
         decision.id === id
-          ? {
-              ...decision,
-              ...patch,
-              updatedAt: Date.now(),
-            }
+          ? (() => {
+              const next = { ...decision, ...patch };
+              const same =
+                JSON.stringify({ ...decision, updatedAt: undefined }) ===
+                JSON.stringify({ ...next, updatedAt: undefined });
+              return same
+                ? decision
+                : {
+                    ...next,
+                    updatedAt: Date.now(),
+                  };
+            })()
           : decision,
       ),
     );
   };
 
   const remove = (id: string) => {
-    setDecisions((prev) => prev.filter((d) => d.id !== id));
+    setDecisions((prev) => {
+      const next = prev.filter((d) => d.id !== id);
+      return next.length === prev.length ? prev : next;
+    });
   };
 
   const replaceAll = (next: Decision[]) => {
-    setDecisions(next);
+    setDecisions((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
   };
 
   return { decisions, add, update, remove, replaceAll, hydrated };

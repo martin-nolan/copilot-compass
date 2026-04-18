@@ -76,9 +76,13 @@ function load(): LocalStore {
 }
 
 function persist(next: LocalStore) {
+  const previousSerialized = JSON.stringify(memory);
+  const nextSerialized = JSON.stringify(next);
+  if (previousSerialized === nextSerialized) return;
+
   memory = next;
   try {
-    localStorage.setItem(KEY, JSON.stringify(next));
+    localStorage.setItem(KEY, nextSerialized);
     const shouldBackup = !next.lastBackupAt || Date.now() - next.lastBackupAt > BACKUP_INTERVAL_MS;
     if (shouldBackup) {
       const backup: StoreBackup = {
@@ -121,6 +125,7 @@ export function useLocalStore() {
   }, []);
 
   const setCurrentPath = useCallback((id: PathId | null) => {
+    if (memory.currentPath === id) return;
     persist({ ...memory, currentPath: id });
   }, []);
 
@@ -160,10 +165,15 @@ export function useLocalStore() {
   }, []);
 
   const clearRecommendation = useCallback(() => {
+    if (!memory.lastRecommendation) return;
     persist({ ...memory, lastRecommendation: null });
   }, []);
 
   const saveWalkthroughDraft = useCallback((step: number, answers: Answers) => {
+    const current = memory.walkthroughDraft;
+    const sameAnswers = JSON.stringify(current?.answers ?? {}) === JSON.stringify(answers);
+    if (current && current.step === step && sameAnswers) return;
+
     persist({
       ...memory,
       walkthroughDraft: {
@@ -175,20 +185,23 @@ export function useLocalStore() {
   }, []);
 
   const clearWalkthroughDraft = useCallback(() => {
+    if (!memory.walkthroughDraft) return;
     persist({ ...memory, walkthroughDraft: null });
   }, []);
 
   const importStore = useCallback((data: Partial<LocalStore>) => {
-    persist({
+    const next = {
       ...empty,
       ...data,
       bookmarks: { ...empty.bookmarks, ...(data.bookmarks ?? {}) },
-    });
+    };
+    persist(next);
   }, []);
 
   const restoreBackup = useCallback(() => {
     const backup = readBackup();
     if (!backup) return false;
+    if (JSON.stringify(memory) === JSON.stringify(backup.store)) return true;
     persist(backup.store);
     return true;
   }, []);

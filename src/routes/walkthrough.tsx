@@ -131,13 +131,21 @@ function WalkthroughPage() {
   useEffect(() => {
     if (!hydrated || showResult) return;
     if (Object.keys(answers).length === 0) {
-      clearWalkthroughDraft();
+      if (state.walkthroughDraft) clearWalkthroughDraft();
       writeAnswerQuery(null);
       return;
     }
     saveWalkthroughDraft(step, answers);
     writeAnswerQuery(answers);
-  }, [answers, clearWalkthroughDraft, hydrated, saveWalkthroughDraft, showResult, step]);
+  }, [
+    answers,
+    clearWalkthroughDraft,
+    hydrated,
+    saveWalkthroughDraft,
+    showResult,
+    state.walkthroughDraft,
+    step,
+  ]);
 
   useEffect(() => {
     if (showResult) writeAnswerQuery(answers);

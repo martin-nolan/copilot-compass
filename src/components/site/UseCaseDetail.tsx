@@ -185,7 +185,7 @@ export function UseCaseDetail({ useCase, onClose }: Props) {
               </div>
             )}
 
-            <div className="mt-8 flex items-center justify-end gap-2 sticky bottom-0 -mx-6 -mb-6 px-6 pb-6 pt-4 bg-card/95 backdrop-blur-md border-t border-border">
+            <div className="sticky bottom-0 mt-8 flex flex-wrap items-center justify-end gap-2 border-t border-border bg-card/95 pt-4 backdrop-blur-md">
               <button
                 onClick={saveAsDecision}
                 disabled={saved}
