@@ -10,6 +10,11 @@ export type Decision = {
   reactNotes: string;
   nextSteps: string;
   createdAt: number;
+  // optional extras (newer decisions)
+  agentType?: string;
+  mode?: "PoC" | "Production" | "Either";
+  reactRelevance?: "Essential" | "Useful" | "Optional" | "Not needed";
+  tags?: string[];
 };
 
 const KEY = "copilot-pathways:decisions:v1";
@@ -50,5 +55,9 @@ export function useDecisions() {
     setDecisions((prev) => prev.filter((d) => d.id !== id));
   };
 
-  return { decisions, add, remove, hydrated };
+  const replaceAll = (next: Decision[]) => {
+    setDecisions(next);
+  };
+
+  return { decisions, add, remove, replaceAll, hydrated };
 }
