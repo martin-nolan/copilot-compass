@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   walkthroughQuestions,
   recommend,
@@ -56,10 +56,15 @@ function getFirstIncompleteStep(answers: Answers) {
 function writeAnswerQuery(answers: Answers | null) {
   if (typeof window === "undefined") return;
   const url = new URL(window.location.href);
+  const current = url.searchParams.get("a") ?? "";
+  const next = answers && Object.keys(answers).length > 0 ? serializeAnswers(answers) : "";
+
+  if (current === next) return;
+
   if (!answers || Object.keys(answers).length === 0) {
     url.searchParams.delete("a");
   } else {
-    url.searchParams.set("a", serializeAnswers(answers));
+    url.searchParams.set("a", next);
   }
   window.history.replaceState({}, "", url.toString());
 }
@@ -79,6 +84,7 @@ function WalkthroughPage() {
   const [showResult, setShowResult] = useState(false);
   const [copied, setCopied] = useState<"link" | "text" | null>(null);
   const total = walkthroughQuestions.length;
+  const hasHydratedFromState = useRef(false);
   const choose = useCallback((questionId: string, optionId: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
   }, []);
@@ -97,7 +103,8 @@ function WalkthroughPage() {
   }, [answers, clearWalkthroughDraft, saveRecommendation, setCurrentPath, step, total]);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || hasHydratedFromState.current) return;
+    hasHydratedFromState.current = true;
 
     const queryAnswers = deserializeAnswers(
       typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("a"),
