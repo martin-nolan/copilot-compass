@@ -4,7 +4,7 @@ A premium, dark-mode **decision and learning hub** for navigating the Microsoft 
 
 > Built with [Loveable](https://loveable.dev) through iterative prompting, visual refinement, and product-shaping — not a traditional hand-coded workflow.
 
-Live URL: [copilot-compass.lovable.app](https://copilot-compass.lovable.app)
+Live URL: [mscopilotcompass.lovable.app](https://mscopilotcompass.lovable.app)
 
 ---
 
