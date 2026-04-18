@@ -9,12 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalkthroughRouteImport } from './routes/walkthrough'
 import { Route as UseCasesRouteImport } from './routes/use-cases'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as DecisionsRouteImport } from './routes/decisions'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as ChoosePathRouteImport } from './routes/choose-path'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WalkthroughRoute = WalkthroughRouteImport.update({
+  id: '/walkthrough',
+  path: '/walkthrough',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UseCasesRoute = UseCasesRouteImport.update({
   id: '/use-cases',
   path: '/use-cases',
@@ -35,6 +42,11 @@ const CompareRoute = CompareRouteImport.update({
   path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChoosePathRoute = ChoosePathRouteImport.update({
+  id: '/choose-path',
+  path: '/choose-path',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,44 +55,81 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/choose-path': typeof ChoosePathRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
   '/learn': typeof LearnRoute
   '/use-cases': typeof UseCasesRoute
+  '/walkthrough': typeof WalkthroughRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/choose-path': typeof ChoosePathRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
   '/learn': typeof LearnRoute
   '/use-cases': typeof UseCasesRoute
+  '/walkthrough': typeof WalkthroughRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/choose-path': typeof ChoosePathRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
   '/learn': typeof LearnRoute
   '/use-cases': typeof UseCasesRoute
+  '/walkthrough': typeof WalkthroughRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/compare' | '/decisions' | '/learn' | '/use-cases'
+  fullPaths:
+    | '/'
+    | '/choose-path'
+    | '/compare'
+    | '/decisions'
+    | '/learn'
+    | '/use-cases'
+    | '/walkthrough'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/compare' | '/decisions' | '/learn' | '/use-cases'
-  id: '__root__' | '/' | '/compare' | '/decisions' | '/learn' | '/use-cases'
+  to:
+    | '/'
+    | '/choose-path'
+    | '/compare'
+    | '/decisions'
+    | '/learn'
+    | '/use-cases'
+    | '/walkthrough'
+  id:
+    | '__root__'
+    | '/'
+    | '/choose-path'
+    | '/compare'
+    | '/decisions'
+    | '/learn'
+    | '/use-cases'
+    | '/walkthrough'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChoosePathRoute: typeof ChoosePathRoute
   CompareRoute: typeof CompareRoute
   DecisionsRoute: typeof DecisionsRoute
   LearnRoute: typeof LearnRoute
   UseCasesRoute: typeof UseCasesRoute
+  WalkthroughRoute: typeof WalkthroughRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/walkthrough': {
+      id: '/walkthrough'
+      path: '/walkthrough'
+      fullPath: '/walkthrough'
+      preLoaderRoute: typeof WalkthroughRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/use-cases': {
       id: '/use-cases'
       path: '/use-cases'
@@ -109,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/choose-path': {
+      id: '/choose-path'
+      path: '/choose-path'
+      fullPath: '/choose-path'
+      preLoaderRoute: typeof ChoosePathRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,11 +177,22 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChoosePathRoute: ChoosePathRoute,
   CompareRoute: CompareRoute,
   DecisionsRoute: DecisionsRoute,
   LearnRoute: LearnRoute,
   UseCasesRoute: UseCasesRoute,
+  WalkthroughRoute: WalkthroughRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
