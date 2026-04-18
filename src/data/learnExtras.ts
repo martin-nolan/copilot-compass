@@ -15,7 +15,12 @@ export type LearnExtras = {
 
 export const learnExtras: Record<string, LearnExtras> = {
   "what-is-an-agent": {
-    bestForPaths: ["fastest-low-code", "structured-low-code", "product-led-react", "high-code-custom"],
+    bestForPaths: [
+      "fastest-low-code",
+      "structured-low-code",
+      "product-led-react",
+      "high-code-custom",
+    ],
     complexity: "Low",
     whatItIs:
       "A specialised assistant that retrieves, summarises, guides, or acts. Microsoft documents two main approaches for M365 Copilot agents: declarative and custom engine.",
@@ -178,7 +183,12 @@ export const learnExtras: Record<string, LearnExtras> = {
     ifProductionNext: "testing-analytics",
   },
   "poc-vs-production": {
-    bestForPaths: ["fastest-low-code", "structured-low-code", "product-led-react", "high-code-custom"],
+    bestForPaths: [
+      "fastest-low-code",
+      "structured-low-code",
+      "product-led-react",
+      "high-code-custom",
+    ],
     complexity: "Low",
     whatItIs:
       "Two delivery modes judged by different rules. PoC optimises for speed and validation. Production optimises for reliability and ownership.",

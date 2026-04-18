@@ -1,3 +1,5 @@
+import type { PathId } from "./paths";
+
 export type LearningReference = {
   id: string;
   title: string;
@@ -24,6 +26,7 @@ export type Comparison = {
   bestWhenLeft: string;
   bestWhenRight: string;
   likelyFirstMove: string;
+  reviewedAt: string;
   learningReferenceIds: string[];
 };
 
@@ -34,6 +37,7 @@ export type UseCase = {
   title: string;
   summary: string;
   recommendedPath: string;
+  recommendedPathId?: PathId;
   recommendedAgentType: AgentType;
   pocFit: string;
   productionFit: string;
@@ -43,6 +47,7 @@ export type UseCase = {
   productionShape: string;
   reactAngle: string;
   risks: string;
+  reviewedAt: string;
   relatedModuleIds: string[];
   learningReferenceIds: string[];
 };
@@ -51,21 +56,24 @@ export const learningReferences: LearningReference[] = [
   {
     id: "agents-overview",
     title: "Microsoft 365 Copilot agents overview",
-    summary: "What agents are, the two main approaches, and where they fit in the Copilot ecosystem.",
+    summary:
+      "What agents are, the two main approaches, and where they fit in the Copilot ecosystem.",
     category: "Agents",
     href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/overview-agents",
   },
   {
     id: "declarative-agents",
     title: "Declarative agents",
-    summary: "Tailor M365 Copilot using instructions, knowledge, and actions on Microsoft's orchestrator and models.",
+    summary:
+      "Tailor M365 Copilot using instructions, knowledge, and actions on Microsoft's orchestrator and models.",
     category: "Declarative",
     href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/overview-declarative-agent",
   },
   {
     id: "custom-engine-agents",
     title: "Custom engine agents",
-    summary: "Bring your own orchestration and AI services for advanced, full-stack agent scenarios.",
+    summary:
+      "Bring your own orchestration and AI services for advanced, full-stack agent scenarios.",
     category: "Custom Engine",
     href: "https://learn.microsoft.com/microsoft-365-copilot/extensibility/overview-custom-engine-agent",
   },
@@ -93,7 +101,8 @@ export const learningReferences: LearningReference[] = [
   {
     id: "studio-guidance",
     title: "Copilot Studio guidance hub",
-    summary: "End-to-end guidance: planning, design, architecture, RAG, orchestration, channels, testing, analytics, governance.",
+    summary:
+      "End-to-end guidance: planning, design, architecture, RAG, orchestration, channels, testing, analytics, governance.",
     category: "Copilot Studio",
     href: "https://learn.microsoft.com/microsoft-copilot-studio/guidance/",
   },
@@ -114,7 +123,8 @@ export const learningReferences: LearningReference[] = [
   {
     id: "generative-orchestration",
     title: "Generative orchestration",
-    summary: "Let the model dynamically choose topics, tools, knowledge, and child agents to answer.",
+    summary:
+      "Let the model dynamically choose topics, tools, knowledge, and child agents to answer.",
     category: "Copilot Studio",
     href: "https://learn.microsoft.com/microsoft-copilot-studio/advanced-generative-actions",
   },
@@ -175,10 +185,8 @@ export const comparisons: Comparison[] = [
       },
       {
         label: "Best for",
-        leftValue:
-          "Quick learning, fast prototyping, lightweight Microsoft-native assistants.",
-        rightValue:
-          "Structured, multi-step, multi-channel agents with real lifecycle needs.",
+        leftValue: "Quick learning, fast prototyping, lightweight Microsoft-native assistants.",
+        rightValue: "Structured, multi-step, multi-channel agents with real lifecycle needs.",
       },
       {
         label: "Less ideal for",
@@ -222,6 +230,7 @@ export const comparisons: Comparison[] = [
       "The idea is becoming structured, multi-step, or needs to be owned and rolled out.",
     likelyFirstMove:
       "Start in Agent Builder to learn the shape. Move to Copilot Studio when you need orchestration, tools, or channels.",
+    reviewedAt: "2026-03-14",
     learningReferenceIds: [
       "agent-builder",
       "studio-guidance",
@@ -243,15 +252,13 @@ export const comparisons: Comparison[] = [
         label: "What it is",
         leftValue:
           "Instructions + knowledge + actions, running on Copilot's orchestrator and models.",
-        rightValue:
-          "Bring your own orchestration, models, and integration architecture.",
+        rightValue: "Bring your own orchestration, models, and integration architecture.",
       },
       {
         label: "Best for",
         leftValue:
           "Microsoft-native scenarios, lightweight to moderately structured business cases.",
-        rightValue:
-          "Advanced control, custom orchestration, multi-channel, full-stack scenarios.",
+        rightValue: "Advanced control, custom orchestration, multi-channel, full-stack scenarios.",
       },
       {
         label: "Less ideal for",
@@ -295,6 +302,7 @@ export const comparisons: Comparison[] = [
       "You need control over models, orchestration, or integrations the declarative path can't give you.",
     likelyFirstMove:
       "Default to declarative. Only adopt custom engine when a specific limitation forces it.",
+    reviewedAt: "2026-03-18",
     learningReferenceIds: [
       "declarative-agents",
       "custom-engine-agents",
@@ -316,13 +324,11 @@ export const comparisons: Comparison[] = [
         label: "What it is",
         leftValue:
           "The agent lives in Teams, Outlook, Word, SharePoint — wherever the user already is.",
-        rightValue:
-          "The agent is one feature inside a custom app you design and own end-to-end.",
+        rightValue: "The agent is one feature inside a custom app you design and own end-to-end.",
       },
       {
         label: "Best for",
-        leftValue:
-          "Work that already happens in Microsoft 365 day-to-day.",
+        leftValue: "Work that already happens in Microsoft 365 day-to-day.",
         rightValue:
           "Dashboards, workflow tools, training, role-aware copilots inside a broader product.",
       },
@@ -368,6 +374,7 @@ export const comparisons: Comparison[] = [
       "UX matters deeply and the assistant is one part of a broader product experience.",
     likelyFirstMove:
       "Pilot inside Microsoft 365 if the work happens there. Build a React shell when the broader product is the point.",
+    reviewedAt: "2026-03-24",
     learningReferenceIds: ["studio-custom-app", "studio-publishing", "agents-sdk"],
   },
   {
@@ -428,10 +435,10 @@ export const comparisons: Comparison[] = [
     ],
     bestWhenLeft:
       "You don't yet know if the idea is worth building, and a small build will tell you.",
-    bestWhenRight:
-      "You already know it works and people now depend on it.",
+    bestWhenRight: "You already know it works and people now depend on it.",
     likelyFirstMove:
       "Name the mode out loud. Most failed builds happen when one mode is judged by the other's rules.",
+    reviewedAt: "2026-03-22",
     learningReferenceIds: ["studio-testing", "studio-analytics", "generative-orchestration"],
   },
 ];
@@ -440,24 +447,29 @@ export const useCases: UseCase[] = [
   {
     id: "internal-knowledge",
     title: "Internal knowledge assistant",
-    summary:
-      "A small, trustworthy way for a team to ask questions over a known set of docs.",
+    summary: "A small, trustworthy way for a team to ask questions over a known set of docs.",
     recommendedPath: "Agent Builder or Microsoft-native declarative route first",
+    recommendedPathId: "fastest-low-code",
     recommendedAgentType: "Declarative",
     pocFit: "Excellent",
     productionFit: "Good",
     reactFit: "Optional",
     why: "Strong fit for quick knowledge retrieval and internal assistance — and a great early case to learn instructions + knowledge + actions.",
-    pocShape:
-      "Narrow document set, simple Q&A, small audience, minimal grounding rules.",
+    pocShape: "Narrow document set, simple Q&A, small audience, minimal grounding rules.",
     productionShape:
       "Better knowledge boundaries, clearer ownership, stronger review and evaluation, lifecycle management.",
     reactAngle:
       "Only needed if it becomes part of a wider internal tool with its own UX and navigation.",
     risks:
       "Scope creep, stale content, weak evaluation, blurry boundaries on what the assistant should and shouldn't know.",
+    reviewedAt: "2026-03-12",
     relatedModuleIds: ["declarative", "agent-builder", "knowledge-instructions-actions"],
-    learningReferenceIds: ["agents-overview", "declarative-agents", "agent-builder", "agent-templates"],
+    learningReferenceIds: [
+      "agents-overview",
+      "declarative-agents",
+      "agent-builder",
+      "agent-templates",
+    ],
   },
   {
     id: "training-assistant",
@@ -465,19 +477,20 @@ export const useCases: UseCase[] = [
     summary:
       "Helps someone learn a topic, tool, or internal process — with structure, not just chat.",
     recommendedPath: "Copilot Studio or React app + agent layer",
+    recommendedPathId: "structured-low-code",
     recommendedAgentType: "Declarative",
     pocFit: "Good",
     productionFit: "Strong with structure",
     reactFit: "Strong",
     why: "Training usually needs more structure, progression, and stronger UX than a chat helper alone can provide.",
-    pocShape:
-      "Guided lesson flow, narrow content scope, a few core interactions to feel the loop.",
+    pocShape: "Guided lesson flow, narrow content scope, a few core interactions to feel the loop.",
     productionShape:
       "Richer UX, progress and state, role-specific experiences, clearer evaluation of learning outcomes.",
     reactAngle:
       "Strong fit when training is part of a broader app — onboarding, certification, skills tracking.",
     risks:
       "Treating it as 'just a chatbot' and missing the structure that makes training actually work.",
+    reviewedAt: "2026-03-24",
     relatedModuleIds: ["studio", "topics-tools-children", "react-shell"],
     learningReferenceIds: ["studio-guidance", "studio-custom-app", "generative-orchestration"],
   },
@@ -487,20 +500,26 @@ export const useCases: UseCase[] = [
     summary:
       "Helps a user complete a real task — request, approval, status update, structured action.",
     recommendedPath: "Copilot Studio",
+    recommendedPathId: "structured-low-code",
     recommendedAgentType: "Declarative",
     pocFit: "Good",
     productionFit: "Strong",
     reactFit: "Useful",
     why: "Workflow ideas almost always need controlled interaction paths, tools, orchestration, and consistent behaviour.",
-    pocShape:
-      "One or two simple tasks, narrow flow, light orchestration, happy-path only.",
+    pocShape: "One or two simple tasks, narrow flow, light orchestration, happy-path only.",
     productionShape:
       "Stronger guardrails, ownership, failure handling, retry and escalation, operational maturity.",
     reactAngle:
       "Useful when workflows involve steps, forms, approvals, task states, or dashboards.",
     risks:
       "Over-trusting freeform generation in a place that really needs structured tools and validations.",
-    relatedModuleIds: ["studio", "generative-orchestration", "topics-tools-children", "testing-analytics"],
+    reviewedAt: "2026-03-18",
+    relatedModuleIds: [
+      "studio",
+      "generative-orchestration",
+      "topics-tools-children",
+      "testing-analytics",
+    ],
     learningReferenceIds: [
       "studio-guidance",
       "generative-orchestration",
@@ -511,22 +530,21 @@ export const useCases: UseCase[] = [
   {
     id: "support-triage",
     title: "Support triage assistant",
-    summary:
-      "Suggests answers, classifies tickets, and helps route incoming support work.",
+    summary: "Suggests answers, classifies tickets, and helps route incoming support work.",
     recommendedPath: "Agent Builder for exploration, Copilot Studio for the real version",
+    recommendedPathId: "structured-low-code",
     recommendedAgentType: "Declarative",
     pocFit: "Excellent",
     productionFit: "Strong with structure",
     reactFit: "Good in a console",
     why: "Starts simple, becomes operational quickly — once people rely on it, it needs proper edges.",
-    pocShape:
-      "Triage suggestions, common FAQ support, lightweight routing logic, manual fallback.",
+    pocShape: "Triage suggestions, common FAQ support, lightweight routing logic, manual fallback.",
     productionShape:
       "Better evaluation, stronger edge-case handling, clearer escalation, audit and review.",
-    reactAngle:
-      "Good when support is embedded into a wider console or internal tool.",
+    reactAngle: "Good when support is embedded into a wider console or internal tool.",
     risks:
       "Silent misclassification, broken escalation paths, no review loop on what the assistant suggested.",
+    reviewedAt: "2026-03-22",
     relatedModuleIds: ["agent-builder", "studio", "testing-analytics"],
     learningReferenceIds: [
       "agent-builder",
@@ -541,6 +559,7 @@ export const useCases: UseCase[] = [
     summary:
       "An assistant that lives next to charts and metrics, helping users make sense of what they're seeing.",
     recommendedPath: "React app shell + agent layer",
+    recommendedPathId: "product-led-react",
     recommendedAgentType: "Depends",
     pocFit: "Good",
     productionFit: "Strong",
@@ -550,10 +569,10 @@ export const useCases: UseCase[] = [
       "Assistant beside a few charts, predefined prompts, suggested insights, narrow context.",
     productionShape:
       "Role-aware context, embedded actions, deeper workflow awareness, richer journey across the app.",
-    reactAngle:
-      "Essential or near-essential — the surrounding UI is the whole point.",
+    reactAngle: "Essential or near-essential — the surrounding UI is the whole point.",
     risks:
       "Generic 'chat-on-the-side' that doesn't actually understand what the user is looking at.",
+    reviewedAt: "2026-03-24",
     relatedModuleIds: ["react-shell", "custom-engine", "generative-orchestration"],
     learningReferenceIds: ["studio-custom-app", "generative-orchestration", "agents-sdk"],
   },
@@ -568,24 +587,13 @@ export const useCases: UseCase[] = [
     productionFit: "Good with structure",
     reactFit: "Useful",
     why: "Flexible — fits inside Microsoft surfaces for fast value, or inside a custom app when outputs need state and review.",
-    pocShape:
-      "Quick summaries, narrow sources, fast iteration, single-user feel.",
+    pocShape: "Quick summaries, narrow sources, fast iteration, single-user feel.",
     productionShape:
       "Stronger source boundaries, review flow, repeatable outputs, more structured UX.",
-    reactAngle:
-      "Useful when outputs need saved state, comparisons, review queues, or navigation.",
-    risks:
-      "Confident summaries over weak sources; no traceability back to what was actually read.",
+    reactAngle: "Useful when outputs need saved state, comparisons, review queues, or navigation.",
+    risks: "Confident summaries over weak sources; no traceability back to what was actually read.",
+    reviewedAt: "2026-03-24",
     relatedModuleIds: ["declarative", "custom-engine", "react-shell"],
     learningReferenceIds: ["agents-overview", "declarative-agents", "studio-custom-app"],
   },
 ];
-
-export const pathFilters = [
-  "All",
-  "M365 Copilot",
-  "Copilot Studio",
-  "React App",
-] as const;
-
-export type PathFilter = (typeof pathFilters)[number];

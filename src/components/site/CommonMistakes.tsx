@@ -1,6 +1,12 @@
 import { AlertTriangle } from "lucide-react";
 
-export function CommonMistakes({ items, title = "Common mistakes" }: { items: string[]; title?: string }) {
+export function CommonMistakes({
+  items,
+  title = "Common mistakes",
+}: {
+  items: string[];
+  title?: string;
+}) {
   if (!items || items.length === 0) return null;
   return (
     <div className="rounded-xl border border-border bg-background/40 p-5">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -10,24 +10,43 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Decision } from "@/hooks/useDecisions";
+import { pathShortNames } from "@/data/paths";
 
 type Props = {
+  initialValue?: Partial<Omit<Decision, "id" | "createdAt">>;
   onSave: (d: Omit<Decision, "id" | "createdAt">) => void;
   onCancel?: () => void;
+  submitLabel?: string;
 };
 
-const paths = ["M365 Copilot", "Copilot Studio", "React App", "Hybrid"];
+const emptyForm = {
+  ideaName: "",
+  chosenPath: pathShortNames[0],
+  why: "",
+  pocNotes: "",
+  productionNotes: "",
+  reactNotes: "",
+  nextSteps: "",
+  agentType: undefined,
+  mode: undefined,
+  reactRelevance: undefined,
+  tags: [],
+};
 
-export function DecisionForm({ onSave, onCancel }: Props) {
+export function DecisionForm({
+  initialValue,
+  onSave,
+  onCancel,
+  submitLabel = "Save decision",
+}: Props) {
   const [form, setForm] = useState({
-    ideaName: "",
-    chosenPath: "M365 Copilot",
-    why: "",
-    pocNotes: "",
-    productionNotes: "",
-    reactNotes: "",
-    nextSteps: "",
+    ...emptyForm,
+    ...initialValue,
   });
+
+  useEffect(() => {
+    setForm({ ...emptyForm, ...initialValue });
+  }, [initialValue]);
 
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
@@ -36,22 +55,11 @@ export function DecisionForm({ onSave, onCancel }: Props) {
     e.preventDefault();
     if (!form.ideaName.trim()) return;
     onSave(form);
-    setForm({
-      ideaName: "",
-      chosenPath: "M365 Copilot",
-      why: "",
-      pocNotes: "",
-      productionNotes: "",
-      reactNotes: "",
-      nextSteps: "",
-    });
+    setForm(emptyForm);
   };
 
   return (
-    <form
-      onSubmit={submit}
-      className="premium-card p-6 space-y-5"
-    >
+    <form onSubmit={submit} className="premium-card p-6 space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Idea name">
           <Input
@@ -67,7 +75,7 @@ export function DecisionForm({ onSave, onCancel }: Props) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {paths.map((p) => (
+              {pathShortNames.map((p) => (
                 <SelectItem key={p} value={p}>
                   {p}
                 </SelectItem>
@@ -130,18 +138,15 @@ export function DecisionForm({ onSave, onCancel }: Props) {
             Cancel
           </Button>
         )}
-        <Button
-          type="submit"
-          className="bg-amber text-amber-foreground hover:bg-amber/90"
-        >
-          Save decision
+        <Button type="submit" className="bg-amber text-amber-foreground hover:bg-amber/90">
+          {submitLabel}
         </Button>
       </div>
     </form>
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <label className="block">
       <div className="editorial-eyebrow mb-1.5">{label}</div>

@@ -19,9 +19,7 @@ export function PathCard({ path, compact = false }: { path: PathDef; compact?: b
         </span>
       </div>
 
-      <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-        {path.tagline}
-      </p>
+      <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{path.tagline}</p>
 
       <div className="mt-4 flex flex-wrap gap-1.5">
         <TagPill tone="amber">Complexity: {path.complexity}</TagPill>

@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import { learningReferences } from "@/data/pathways";
+import { getHostname } from "@/lib/utils";
 
 type Props = {
   ids: string[];
@@ -27,13 +28,14 @@ export function LearningReferenceList({ ids, title = "Read More" }: Props) {
                   <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
                     {r.category}
                   </span>
+                  <span className="text-[10px] text-muted-foreground/70">
+                    {getHostname(r.href)}
+                  </span>
                 </div>
                 <div className="mt-0.5 text-sm font-medium text-foreground group-hover:text-amber transition-colors">
                   {r.title}
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                  {r.summary}
-                </p>
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{r.summary}</p>
               </div>
               <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-amber transition-colors mt-1 shrink-0" />
             </a>

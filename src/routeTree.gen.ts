@@ -11,11 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WalkthroughRouteImport } from './routes/walkthrough'
 import { Route as UseCasesRouteImport } from './routes/use-cases'
+import { Route as SavedRouteImport } from './routes/saved'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as DecisionsRouteImport } from './routes/decisions'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ChoosePathRouteImport } from './routes/choose-path'
+import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LlmsTxtRouteImport } from './routes/llms.txt'
 
 const WalkthroughRoute = WalkthroughRouteImport.update({
   id: '/walkthrough',
@@ -25,6 +28,11 @@ const WalkthroughRoute = WalkthroughRouteImport.update({
 const UseCasesRoute = UseCasesRouteImport.update({
   id: '/use-cases',
   path: '/use-cases',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SavedRoute = SavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnRoute = LearnRouteImport.update({
@@ -47,78 +55,109 @@ const ChoosePathRoute = ChoosePathRouteImport.update({
   path: '/choose-path',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChangelogRoute = ChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LlmsTxtRoute = LlmsTxtRouteImport.update({
+  id: '/llms/txt',
+  path: '/llms/txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/changelog': typeof ChangelogRoute
   '/choose-path': typeof ChoosePathRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
   '/learn': typeof LearnRoute
+  '/saved': typeof SavedRoute
   '/use-cases': typeof UseCasesRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/llms/txt': typeof LlmsTxtRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/changelog': typeof ChangelogRoute
   '/choose-path': typeof ChoosePathRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
   '/learn': typeof LearnRoute
+  '/saved': typeof SavedRoute
   '/use-cases': typeof UseCasesRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/llms/txt': typeof LlmsTxtRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/changelog': typeof ChangelogRoute
   '/choose-path': typeof ChoosePathRoute
   '/compare': typeof CompareRoute
   '/decisions': typeof DecisionsRoute
   '/learn': typeof LearnRoute
+  '/saved': typeof SavedRoute
   '/use-cases': typeof UseCasesRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/llms/txt': typeof LlmsTxtRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/changelog'
     | '/choose-path'
     | '/compare'
     | '/decisions'
     | '/learn'
+    | '/saved'
     | '/use-cases'
     | '/walkthrough'
+    | '/llms/txt'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/changelog'
     | '/choose-path'
     | '/compare'
     | '/decisions'
     | '/learn'
+    | '/saved'
     | '/use-cases'
     | '/walkthrough'
+    | '/llms/txt'
   id:
     | '__root__'
     | '/'
+    | '/changelog'
     | '/choose-path'
     | '/compare'
     | '/decisions'
     | '/learn'
+    | '/saved'
     | '/use-cases'
     | '/walkthrough'
+    | '/llms/txt'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChangelogRoute: typeof ChangelogRoute
   ChoosePathRoute: typeof ChoosePathRoute
   CompareRoute: typeof CompareRoute
   DecisionsRoute: typeof DecisionsRoute
   LearnRoute: typeof LearnRoute
+  SavedRoute: typeof SavedRoute
   UseCasesRoute: typeof UseCasesRoute
   WalkthroughRoute: typeof WalkthroughRoute
+  LlmsTxtRoute: typeof LlmsTxtRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -135,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/use-cases'
       fullPath: '/use-cases'
       preLoaderRoute: typeof UseCasesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saved': {
+      id: '/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof SavedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn': {
@@ -165,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChoosePathRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/changelog': {
+      id: '/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof ChangelogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -172,18 +225,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/llms/txt': {
+      id: '/llms/txt'
+      path: '/llms/txt'
+      fullPath: '/llms/txt'
+      preLoaderRoute: typeof LlmsTxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChangelogRoute: ChangelogRoute,
   ChoosePathRoute: ChoosePathRoute,
   CompareRoute: CompareRoute,
   DecisionsRoute: DecisionsRoute,
   LearnRoute: LearnRoute,
+  SavedRoute: SavedRoute,
   UseCasesRoute: UseCasesRoute,
   WalkthroughRoute: WalkthroughRoute,
+  LlmsTxtRoute: LlmsTxtRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

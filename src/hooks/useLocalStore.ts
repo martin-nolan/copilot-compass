@@ -3,6 +3,8 @@ import type { PathId } from "@/data/paths";
 import type { Recommendation, Answers } from "@/data/walkthrough";
 
 const KEY = "copilot-compass:store:v1";
+const BACKUP_KEY = "copilot-compass:store:backup:v1";
+const BACKUP_INTERVAL_MS = 1000 * 60 * 60 * 24 * 7;
 
 export type RecentItem = {
   type: "module" | "comparison" | "use-case" | "path" | "page";
@@ -18,6 +20,17 @@ export type StoredRecommendation = {
   at: number;
 };
 
+export type WalkthroughDraft = {
+  step: number;
+  answers: Answers;
+  updatedAt: number;
+};
+
+export type StoreBackup = {
+  savedAt: number;
+  store: LocalStore;
+};
+
 export type LocalStore = {
   currentPath: PathId | null;
   bookmarks: {
@@ -29,6 +42,8 @@ export type LocalStore = {
   completedModules: string[];
   recents: RecentItem[]; // most-recent first, capped
   lastRecommendation: StoredRecommendation | null;
+  walkthroughDraft: WalkthroughDraft | null;
+  lastBackupAt: number | null;
 };
 
 const empty: LocalStore = {
@@ -37,6 +52,8 @@ const empty: LocalStore = {
   completedModules: [],
   recents: [],
   lastRecommendation: null,
+  walkthroughDraft: null,
+  lastBackupAt: null,
 };
 
 let memory: LocalStore = empty;
@@ -62,10 +79,30 @@ function persist(next: LocalStore) {
   memory = next;
   try {
     localStorage.setItem(KEY, JSON.stringify(next));
+    const shouldBackup = !next.lastBackupAt || Date.now() - next.lastBackupAt > BACKUP_INTERVAL_MS;
+    if (shouldBackup) {
+      const backup: StoreBackup = {
+        savedAt: Date.now(),
+        store: { ...next, lastBackupAt: Date.now() },
+      };
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(backup));
+      memory = backup.store;
+      localStorage.setItem(KEY, JSON.stringify(memory));
+    }
   } catch {
     // ignore
   }
   listeners.forEach((l) => l());
+}
+
+function readBackup(): StoreBackup | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(BACKUP_KEY);
+    return raw ? (JSON.parse(raw) as StoreBackup) : null;
+  } catch {
+    return null;
+  }
 }
 
 export function useLocalStore() {
@@ -87,19 +124,14 @@ export function useLocalStore() {
     persist({ ...memory, currentPath: id });
   }, []);
 
-  const toggleBookmark = useCallback(
-    (kind: keyof LocalStore["bookmarks"], id: string) => {
-      const list = memory.bookmarks[kind] as string[];
-      const next = list.includes(id)
-        ? list.filter((x) => x !== id)
-        : [...list, id];
-      persist({
-        ...memory,
-        bookmarks: { ...memory.bookmarks, [kind]: next },
-      });
-    },
-    [],
-  );
+  const toggleBookmark = useCallback((kind: keyof LocalStore["bookmarks"], id: string) => {
+    const list = memory.bookmarks[kind] as string[];
+    const next = list.includes(id) ? list.filter((x) => x !== id) : [...list, id];
+    persist({
+      ...memory,
+      bookmarks: { ...memory.bookmarks, [kind]: next },
+    });
+  }, []);
 
   const isBookmarked = useCallback(
     (kind: keyof LocalStore["bookmarks"], id: string) =>
@@ -115,25 +147,35 @@ export function useLocalStore() {
   }, []);
 
   const trackRecent = useCallback((item: Omit<RecentItem, "at">) => {
-    const cleaned = memory.recents.filter(
-      (r) => !(r.type === item.type && r.id === item.id),
-    );
+    const cleaned = memory.recents.filter((r) => !(r.type === item.type && r.id === item.id));
     const next = [{ ...item, at: Date.now() }, ...cleaned].slice(0, 8);
     persist({ ...memory, recents: next });
   }, []);
 
-  const saveRecommendation = useCallback(
-    (rec: Recommendation, answers: Answers) => {
-      persist({
-        ...memory,
-        lastRecommendation: { recommendation: rec, answers, at: Date.now() },
-      });
-    },
-    [],
-  );
+  const saveRecommendation = useCallback((rec: Recommendation, answers: Answers) => {
+    persist({
+      ...memory,
+      lastRecommendation: { recommendation: rec, answers, at: Date.now() },
+    });
+  }, []);
 
   const clearRecommendation = useCallback(() => {
     persist({ ...memory, lastRecommendation: null });
+  }, []);
+
+  const saveWalkthroughDraft = useCallback((step: number, answers: Answers) => {
+    persist({
+      ...memory,
+      walkthroughDraft: {
+        step,
+        answers,
+        updatedAt: Date.now(),
+      },
+    });
+  }, []);
+
+  const clearWalkthroughDraft = useCallback(() => {
+    persist({ ...memory, walkthroughDraft: null });
   }, []);
 
   const importStore = useCallback((data: Partial<LocalStore>) => {
@@ -143,6 +185,15 @@ export function useLocalStore() {
       bookmarks: { ...empty.bookmarks, ...(data.bookmarks ?? {}) },
     });
   }, []);
+
+  const restoreBackup = useCallback(() => {
+    const backup = readBackup();
+    if (!backup) return false;
+    persist(backup.store);
+    return true;
+  }, []);
+
+  const getBackup = useCallback(() => readBackup(), []);
 
   return {
     state,
@@ -154,6 +205,10 @@ export function useLocalStore() {
     trackRecent,
     saveRecommendation,
     clearRecommendation,
+    saveWalkthroughDraft,
+    clearWalkthroughDraft,
     importStore,
+    restoreBackup,
+    getBackup,
   };
 }

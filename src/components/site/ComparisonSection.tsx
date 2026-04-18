@@ -2,7 +2,10 @@ import type { Comparison } from "@/data/pathways";
 import { LearningReferenceList } from "./LearningReferenceList";
 import { CommonMistakes } from "./CommonMistakes";
 import { BookmarkButton } from "./BookmarkButton";
+import { useTrackRecentOnView } from "@/hooks/useTrackRecentOnView";
 import { ArrowRight } from "lucide-react";
+import { daysSince, formatMonthYear } from "@/lib/utils";
+import { useMemo } from "react";
 
 // Per-comparison editorial advice (decision-ready framing)
 const advice: Record<
@@ -79,12 +82,10 @@ const advice: Record<
   "poc-vs-production": {
     bestForQuestion: "Which mode am I actually in right now?",
     typicalChoice: "Most failed builds happen when one mode is judged by the other's rules.",
-    moveSignal:
-      "PoC graduates to production the moment people start depending on it.",
+    moveSignal: "PoC graduates to production the moment people start depending on it.",
     chooseLeftWhen:
       "You don't yet know if the idea is worth building, and a small build will tell you.",
-    chooseRightWhen:
-      "You already know it works and people now depend on it.",
+    chooseRightWhen: "You already know it works and people now depend on it.",
     ifStartingToday:
       "Name the mode out loud. Then judge every choice against the rules of that mode — not the other one.",
     learnNext: "poc-vs-production",
@@ -99,16 +100,27 @@ const advice: Record<
 
 export function ComparisonSection({ comparison }: { comparison: Comparison }) {
   const a = advice[comparison.id];
+  const recentRef = useTrackRecentOnView(
+    useMemo(
+      () => ({
+        type: "comparison" as const,
+        id: comparison.id,
+        label: comparison.title,
+        href: `/choose-path#${comparison.id}`,
+      }),
+      [comparison.id, comparison.title],
+    ),
+  );
+  const isStale = daysSince(comparison.reviewedAt) > 180;
   return (
-    <section id={comparison.id} className="scroll-mt-24">
+    <section id={comparison.id} className="scroll-mt-24" ref={recentRef}>
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="max-w-3xl">
-          <h2 className="text-3xl sm:text-4xl font-medium tracking-tight">
-            {comparison.title}
-          </h2>
-          <p className="mt-3 text-muted-foreground leading-relaxed">
-            {comparison.summary}
-          </p>
+          <h2 className="text-3xl sm:text-4xl font-medium tracking-tight">{comparison.title}</h2>
+          <p className="mt-3 text-muted-foreground leading-relaxed">{comparison.summary}</p>
+          <div className="mt-3 text-xs text-muted-foreground">
+            {isStale ? "Worth re-checking" : `Reviewed ${formatMonthYear(comparison.reviewedAt)}`}
+          </div>
         </div>
         <BookmarkButton kind="comparisons" id={comparison.id} size="sm" />
       </div>
@@ -154,14 +166,10 @@ export function ComparisonSection({ comparison }: { comparison: Comparison }) {
                 <div className="editorial-eyebrow leading-tight">{row.label}</div>
               </div>
               <div className="p-4 sm:p-5 border-t border-r border-border">
-                <p className="text-sm text-foreground/90 leading-relaxed">
-                  {row.leftValue}
-                </p>
+                <p className="text-sm text-foreground/90 leading-relaxed">{row.leftValue}</p>
               </div>
               <div className="p-4 sm:p-5 border-t border-border">
-                <p className="text-sm text-foreground/90 leading-relaxed">
-                  {row.rightValue}
-                </p>
+                <p className="text-sm text-foreground/90 leading-relaxed">{row.rightValue}</p>
               </div>
             </div>
           ))}
@@ -172,18 +180,14 @@ export function ComparisonSection({ comparison }: { comparison: Comparison }) {
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="premium-card p-5">
           <div className="editorial-eyebrow text-amber mb-2">Choose this when</div>
-          <div className="text-xs text-muted-foreground mb-1">
-            {comparison.leftTitle}
-          </div>
+          <div className="text-xs text-muted-foreground mb-1">{comparison.leftTitle}</div>
           <p className="text-sm text-foreground/90 leading-relaxed">
             {a?.chooseLeftWhen ?? comparison.bestWhenLeft}
           </p>
         </div>
         <div className="premium-card p-5">
           <div className="editorial-eyebrow mb-2">Choose this when</div>
-          <div className="text-xs text-muted-foreground mb-1">
-            {comparison.rightTitle}
-          </div>
+          <div className="text-xs text-muted-foreground mb-1">{comparison.rightTitle}</div>
           <p className="text-sm text-foreground/90 leading-relaxed">
             {a?.chooseRightWhen ?? comparison.bestWhenRight}
           </p>
@@ -206,7 +210,10 @@ export function ComparisonSection({ comparison }: { comparison: Comparison }) {
 
       {comparison.learningReferenceIds.length > 0 && (
         <div className="mt-10 max-w-3xl">
-          <LearningReferenceList ids={comparison.learningReferenceIds} title="Official references" />
+          <LearningReferenceList
+            ids={comparison.learningReferenceIds}
+            title="Official references"
+          />
         </div>
       )}
     </section>

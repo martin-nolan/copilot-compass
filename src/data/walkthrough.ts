@@ -338,3 +338,46 @@ export function recommend(answers: Answers): Recommendation {
 
   return { pathId: winner, scores, ...map[winner] };
 }
+
+export function serializeAnswers(answers: Answers) {
+  return walkthroughQuestions.map((question) => answers[question.id] ?? "").join(",");
+}
+
+export function deserializeAnswers(value: string | null | undefined): Answers {
+  if (!value) return {};
+  const items = value.split(",");
+  return walkthroughQuestions.reduce<Answers>((next, question, index) => {
+    const optionId = items[index];
+    if (optionId && question.options.some((option) => option.id === optionId)) {
+      next[question.id] = optionId;
+    }
+    return next;
+  }, {});
+}
+
+export function getRankedPaths(scores: Record<PathId, number>) {
+  return Object.entries(scores)
+    .sort((a, b) => b[1] - a[1])
+    .map(([pathId, score]) => ({ pathId: pathId as PathId, score }));
+}
+
+export function getGapDrivers(answers: Answers, winner: PathId, runnerUp: PathId, limit = 2) {
+  return walkthroughQuestions
+    .map((question) => {
+      const answerId = answers[question.id];
+      const option = question.options.find((candidate) => candidate.id === answerId);
+      if (!option) return null;
+      const winnerWeight = option.weights[winner] ?? 0;
+      const runnerUpWeight = option.weights[runnerUp] ?? 0;
+      return {
+        questionId: question.id,
+        question: question.question,
+        optionId: option.id,
+        optionLabel: option.label,
+        swing: winnerWeight - runnerUpWeight,
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => !!item)
+    .sort((a, b) => b.swing - a.swing)
+    .slice(0, limit);
+}

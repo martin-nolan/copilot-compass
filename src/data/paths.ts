@@ -45,7 +45,7 @@ export const paths: PathDef[] = [
     whenRight:
       "The work already lives in Microsoft 365, the audience is small, and the value is in shipping something usable this week.",
     whyThis:
-      "Almost no infra to own. You configure rather than code, and Microsoft does the orchestration and model work for you.",
+      "You configure more than you build. Microsoft owns the orchestrator, model layer, and most of the operational weight.",
     keyTradeoff:
       "Bounded by the declarative surface. As soon as you need richer orchestration, channels, tools, or analytics, you outgrow it.",
     bestFitMode: "PoC",
@@ -83,18 +83,13 @@ export const paths: PathDef[] = [
     whenRight:
       "The idea is becoming a real workflow, needs more than chat, and people are starting to depend on it.",
     whyThis:
-      "Stronger lifecycle story: real testing, evaluation, channels, analytics, governance — without owning a backend.",
+      "You get structure, channels, testing, analytics, and governance without taking on a custom backend.",
     keyTradeoff:
       "More authoring overhead than Agent Builder. You're still inside Microsoft's platform — model and orchestration choices stay constrained.",
     bestFitMode: "Production",
     bestFirstMove:
       "Start with one tool, one knowledge source, and generative orchestration. Resist the urge to author every branch as a topic.",
-    learnNext: [
-      "studio",
-      "generative-orchestration",
-      "topics-tools-children",
-      "testing-analytics",
-    ],
+    learnNext: ["studio", "generative-orchestration", "topics-tools-children", "testing-analytics"],
     avoidIf:
       "You only need a tiny internal helper (Agent Builder is faster), or you need full control over the model and runtime (go custom engine).",
     relatedComparisons: ["builder-vs-studio", "declarative-vs-custom"],
@@ -127,7 +122,7 @@ export const paths: PathDef[] = [
     whenRight:
       "UX is the product. There are dashboards, forms, role-aware views, saved state, or a journey that doesn't fit inside a host Copilot UI.",
     whyThis:
-      "You get full control over layout, journey, role state, and how the assistant participates in the broader product.",
+      "You control the full journey: layout, navigation, saved state, and how the assistant participates in the product.",
     keyTradeoff:
       "You also own everything you'd rather not — auth, infra, deployment, embedding patterns, contextual handoff.",
     bestFitMode: "Both",
@@ -165,7 +160,7 @@ export const paths: PathDef[] = [
     whenRight:
       "A specific limitation in declarative or Studio is forcing you off it: model choice, orchestration logic, integrations, or multi-channel reach.",
     whyThis:
-      "Maximum control. You can shape every layer of the stack to match the product and integration story.",
+      "You can shape every layer of the stack to match the product, integration, and runtime constraints.",
     keyTradeoff:
       "Maximum cost too. Real backend, observability, evaluation harness, deployment hygiene — and you own all of it.",
     bestFitMode: "Production",
@@ -176,13 +171,19 @@ export const paths: PathDef[] = [
       "There's no concrete limitation pushing you here — start lighter and let the platform earn the move up.",
     relatedComparisons: ["declarative-vs-custom", "native-vs-react"],
     relatedUseCaseIds: ["dashboard-companion", "research-copilot"],
-    learningReferenceIds: [
-      "custom-engine-agents",
-      "agents-sdk",
-      "studio-custom-app",
-    ],
+    learningReferenceIds: ["custom-engine-agents", "agents-sdk", "studio-custom-app"],
   },
 ];
+
+export const pathShortNames = paths.map((path) => path.shortName) as [string, ...string[]];
+
+export function getPathByShortName(shortName: string | null | undefined): PathDef | undefined {
+  if (!shortName) return undefined;
+  return paths.find((path) => path.shortName === shortName);
+}
+
+export const decisionPathFilters = ["All", ...pathShortNames] as const;
+export type DecisionPathFilter = (typeof decisionPathFilters)[number];
 
 export function getPath(id: PathId | null | undefined): PathDef | undefined {
   if (!id) return undefined;

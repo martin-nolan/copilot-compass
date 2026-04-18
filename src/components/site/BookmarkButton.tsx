@@ -24,7 +24,7 @@ export function BookmarkButton({ kind, id, label = "Save", className, size = "md
       }}
       aria-pressed={saved}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border transition-colors",
+        "inline-flex items-center gap-1.5 rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-amber/50 focus-visible:outline-none",
         size === "sm" ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs",
         saved
           ? "border-amber/40 bg-amber/10 text-amber"

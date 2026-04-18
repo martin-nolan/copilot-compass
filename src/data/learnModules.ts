@@ -7,6 +7,8 @@ export type LearnModule = {
   lessIdealFor: string[];
   pocShape: string;
   productionShape: string;
+  reviewedAt: string;
+  relatedModuleIds?: string[];
   learningReferenceIds: string[];
 };
 
@@ -30,13 +32,13 @@ export const learnModules: LearnModule[] = [
       "Forming a clear mental model before choosing tools",
       "Anchoring conversations with stakeholders in the same vocabulary",
     ],
-    lessIdealFor: [
-      "Skipping past — the rest of the field guide builds on this distinction",
-    ],
+    lessIdealFor: ["Skipping past — the rest of the field guide builds on this distinction"],
     pocShape:
       "Pick one shape (knowledge, summarisation, guidance, or action) and one user. Don't try to do all four in a first build.",
     productionShape:
       "Be explicit about what the agent is and isn't responsible for. Most production failures are scope failures, not model failures.",
+    reviewedAt: "2026-03-12",
+    relatedModuleIds: ["declarative", "custom-engine", "poc-vs-production"],
     learningReferenceIds: ["agents-overview"],
   },
   {
@@ -58,6 +60,8 @@ export const learnModules: LearnModule[] = [
       "One template, one knowledge source, a tight set of instructions. Resist adding actions until the basic loop feels right.",
     productionShape:
       "Sharper instructions, governed knowledge, tested actions. Treat the declarative spec as the contract.",
+    reviewedAt: "2026-03-12",
+    relatedModuleIds: ["agent-builder", "knowledge-instructions-actions", "studio"],
     learningReferenceIds: ["declarative-agents", "agents-overview", "agent-templates"],
   },
   {
@@ -79,6 +83,8 @@ export const learnModules: LearnModule[] = [
       "Smallest viable orchestration, one model, one channel. Prove the architectural choice before fanning out.",
     productionShape:
       "Real observability, evaluation harness, model and prompt versioning, deployment hygiene.",
+    reviewedAt: "2026-03-12",
+    relatedModuleIds: ["react-shell", "testing-analytics", "poc-vs-production"],
     learningReferenceIds: ["custom-engine-agents", "agents-sdk"],
   },
   {
@@ -92,14 +98,12 @@ export const learnModules: LearnModule[] = [
       "Templates and quick wins",
       "Microsoft-native assistant ideas",
     ],
-    lessIdealFor: [
-      "Broader product experiences",
-      "More advanced operational scenarios",
-    ],
-    pocShape:
-      "Pick a template, point at a small doc set, ship to a handful of users.",
+    lessIdealFor: ["Broader product experiences", "More advanced operational scenarios"],
+    pocShape: "Pick a template, point at a small doc set, ship to a handful of users.",
     productionShape:
       "Once it's relied on, it usually graduates into Copilot Studio for governance, channels, and depth.",
+    reviewedAt: "2026-03-14",
+    relatedModuleIds: ["declarative", "knowledge-instructions-actions", "studio"],
     learningReferenceIds: ["agent-builder", "agent-templates", "choosing-builder-vs-studio"],
   },
   {
@@ -113,13 +117,13 @@ export const learnModules: LearnModule[] = [
       "Richer orchestration and tools",
       "Testing, evaluation, analytics, governance",
     ],
-    lessIdealFor: [
-      "The lightest possible internal helper — that's Agent Builder territory",
-    ],
+    lessIdealFor: ["The lightest possible internal helper — that's Agent Builder territory"],
     pocShape:
       "One topic or generative orchestration, one tool, one knowledge source. Resist authoring sprawl.",
     productionShape:
       "Defined topics or orchestration policy, tested tools, channel-specific UX, analytics loop.",
+    reviewedAt: "2026-03-14",
+    relatedModuleIds: ["generative-orchestration", "topics-tools-children", "testing-analytics"],
     learningReferenceIds: ["studio-guidance", "studio-publishing", "studio-analytics"],
   },
   {
@@ -132,13 +136,12 @@ export const learnModules: LearnModule[] = [
       "Designing a declarative agent that behaves predictably",
       "Communicating intent across PoC and production",
     ],
-    lessIdealFor: [
-      "Skimming — most quality issues trace back to weak versions of these three",
-    ],
-    pocShape:
-      "Crisp one-paragraph instructions, narrow knowledge, zero or one action.",
+    lessIdealFor: ["Skimming — most quality issues trace back to weak versions of these three"],
+    pocShape: "Crisp one-paragraph instructions, narrow knowledge, zero or one action.",
     productionShape:
       "Versioned instructions, governed knowledge, tested actions with clear failure modes.",
+    reviewedAt: "2026-03-18",
+    relatedModuleIds: ["declarative", "generative-orchestration", "testing-analytics"],
     learningReferenceIds: ["declarative-agents", "agents-overview"],
   },
   {
@@ -152,13 +155,12 @@ export const learnModules: LearnModule[] = [
       "Reducing topic sprawl",
       "Shipping behaviour change without rewiring flows",
     ],
-    lessIdealFor: [
-      "Hard-deterministic flows where every branch must be auditable",
-    ],
-    pocShape:
-      "Trust the orchestrator on a small set of well-described tools and topics.",
+    lessIdealFor: ["Hard-deterministic flows where every branch must be auditable"],
+    pocShape: "Trust the orchestrator on a small set of well-described tools and topics.",
     productionShape:
       "Invest in clear instructions and tool/topic descriptions — the orchestrator selects on those. Add evals.",
+    reviewedAt: "2026-03-18",
+    relatedModuleIds: ["studio", "topics-tools-children", "testing-analytics"],
     learningReferenceIds: ["generative-orchestration", "studio-tools"],
   },
   {
@@ -171,13 +173,12 @@ export const learnModules: LearnModule[] = [
       "Composing complex behaviour from smaller, focused pieces",
       "Reusing capabilities across agents",
     ],
-    lessIdealFor: [
-      "Tiny single-purpose helpers that don't need composition",
-    ],
-    pocShape:
-      "One or two tools, one knowledge source, no child agents yet.",
+    lessIdealFor: ["Tiny single-purpose helpers that don't need composition"],
+    pocShape: "One or two tools, one knowledge source, no child agents yet.",
     productionShape:
       "Clear ownership per tool and topic, naming and description quality treated as a first-class concern.",
+    reviewedAt: "2026-03-18",
+    relatedModuleIds: ["studio", "generative-orchestration", "react-shell"],
     learningReferenceIds: ["studio-tools", "generative-orchestration", "studio-guidance"],
   },
   {
@@ -191,14 +192,18 @@ export const learnModules: LearnModule[] = [
       "Understanding what the agent is actually used for",
       "Closing the loop from usage back into design",
     ],
-    lessIdealFor: [
-      "PoCs that haven't earned the operational weight yet",
-    ],
-    pocShape:
-      "Manual test pane, a handful of trace reviews, eyeballed quality.",
+    lessIdealFor: ["PoCs that haven't earned the operational weight yet"],
+    pocShape: "Manual test pane, a handful of trace reviews, eyeballed quality.",
     productionShape:
       "Defined evaluation set, channel-aware testing, analytics review cadence, lifecycle and governance.",
-    learningReferenceIds: ["studio-testing", "studio-analytics", "studio-publishing", "m365-admin-basics"],
+    reviewedAt: "2026-03-22",
+    relatedModuleIds: ["studio", "poc-vs-production", "custom-engine"],
+    learningReferenceIds: [
+      "studio-testing",
+      "studio-analytics",
+      "studio-publishing",
+      "m365-admin-basics",
+    ],
   },
   {
     id: "react-shell",
@@ -211,13 +216,13 @@ export const learnModules: LearnModule[] = [
       "Role-aware product experiences",
       "Saved state, history, comparisons, review queues",
     ],
-    lessIdealFor: [
-      "Quick internal helpers that already live in Microsoft 365",
-    ],
+    lessIdealFor: ["Quick internal helpers that already live in Microsoft 365"],
     pocShape:
       "Embed a Studio agent into one screen of an existing React app. Don't rebuild the product around it.",
     productionShape:
       "Real auth and state, considered embedding pattern, contextual handoff between app and agent.",
+    reviewedAt: "2026-03-24",
+    relatedModuleIds: ["studio", "custom-engine", "testing-analytics"],
     learningReferenceIds: ["studio-custom-app", "agents-sdk"],
   },
   {
@@ -226,17 +231,13 @@ export const learnModules: LearnModule[] = [
     title: "PoC vs Production mindset",
     summary:
       "Two delivery modes, judged by different rules. PoC mode optimises for speed, narrow scope, demoability, and validation. Production mode optimises for reliability, ownership, supportability, and rollout maturity.",
-    goodFor: [
-      "Naming the mode you're actually in",
-      "Setting fair expectations with stakeholders",
-    ],
-    lessIdealFor: [
-      "Pretending one mode is the other — the most common cause of failed builds",
-    ],
-    pocShape:
-      "Speed, narrow scope, demoability, low friction, fast validation.",
+    goodFor: ["Naming the mode you're actually in", "Setting fair expectations with stakeholders"],
+    lessIdealFor: ["Pretending one mode is the other — the most common cause of failed builds"],
+    pocShape: "Speed, narrow scope, demoability, low friction, fast validation.",
     productionShape:
       "Reliability, ownership, supportability, better UX, data and workflow boundaries, repeatability.",
+    reviewedAt: "2026-03-24",
+    relatedModuleIds: ["testing-analytics", "agent-builder", "react-shell"],
     learningReferenceIds: ["studio-testing", "studio-analytics", "studio-guidance"],
   },
 ];

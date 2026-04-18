@@ -11,10 +11,7 @@ type Props = {
 
 export function IntroCard({ eyebrow, title, description, to, symbol }: Props) {
   return (
-    <Link
-      to={to}
-      className="premium-card group block p-6 h-full"
-    >
+    <Link to={to} className="premium-card group block p-6 h-full">
       <div className="flex items-start justify-between mb-8">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-amber/20 to-amber/5 border border-amber/20 text-amber font-serif text-lg">
           {symbol}

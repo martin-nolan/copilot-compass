@@ -15,6 +15,7 @@ export type Decision = {
   mode?: "PoC" | "Production" | "Either";
   reactRelevance?: "Essential" | "Useful" | "Optional" | "Not needed";
   tags?: string[];
+  updatedAt?: number;
 };
 
 const KEY = "copilot-compass:decisions:v1";
@@ -47,8 +48,23 @@ export function useDecisions() {
       ...d,
       id: crypto.randomUUID(),
       createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
     setDecisions((prev) => [decision, ...prev]);
+  };
+
+  const update = (id: string, patch: Omit<Decision, "id" | "createdAt">) => {
+    setDecisions((prev) =>
+      prev.map((decision) =>
+        decision.id === id
+          ? {
+              ...decision,
+              ...patch,
+              updatedAt: Date.now(),
+            }
+          : decision,
+      ),
+    );
   };
 
   const remove = (id: string) => {
@@ -59,5 +75,5 @@ export function useDecisions() {
     setDecisions(next);
   };
 
-  return { decisions, add, remove, replaceAll, hydrated };
+  return { decisions, add, update, remove, replaceAll, hydrated };
 }

@@ -11,9 +11,12 @@ import { LearningReferenceList } from "./LearningReferenceList";
 import { BookmarkButton } from "./BookmarkButton";
 import { learnModules } from "@/data/learnModules";
 import { useDecisions } from "@/hooks/useDecisions";
+import { useLocalStore } from "@/hooks/useLocalStore";
+import { getPath } from "@/data/paths";
 import { Save, Zap, Shield, Layout, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { type ReactNode, useState, useEffect } from "react";
+import { daysSince, formatMonthYear } from "@/lib/utils";
 
 type Props = {
   useCase: UseCase | null;
@@ -22,17 +25,31 @@ type Props = {
 
 export function UseCaseDetail({ useCase, onClose }: Props) {
   const { add } = useDecisions();
+  const { trackRecent } = useLocalStore();
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (useCase) setSaved(false);
-  }, [useCase?.id]);
+  }, [useCase]);
+
+  useEffect(() => {
+    if (!useCase) return;
+    const timeoutId = window.setTimeout(() => {
+      trackRecent({
+        type: "use-case",
+        id: useCase.id,
+        label: useCase.title,
+        href: "/use-cases",
+      });
+    }, 1000);
+    return () => window.clearTimeout(timeoutId);
+  }, [trackRecent, useCase]);
 
   const saveAsDecision = () => {
     if (!useCase) return;
     add({
       ideaName: useCase.title,
-      chosenPath: useCase.recommendedPath,
+      chosenPath: getPath(useCase.recommendedPathId)?.shortName ?? useCase.recommendedPath,
       why: useCase.why,
       pocNotes: useCase.pocShape,
       productionNotes: useCase.productionShape,
@@ -60,6 +77,11 @@ export function UseCaseDetail({ useCase, onClose }: Props) {
               <DialogDescription className="text-muted-foreground">
                 {useCase.summary}
               </DialogDescription>
+              <div className="mt-2 text-xs text-muted-foreground">
+                {daysSince(useCase.reviewedAt) > 180
+                  ? "Worth re-checking"
+                  : `Reviewed ${formatMonthYear(useCase.reviewedAt)}`}
+              </div>
             </DialogHeader>
 
             {/* Recommendation strip */}
@@ -67,9 +89,7 @@ export function UseCaseDetail({ useCase, onClose }: Props) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <div className="editorial-eyebrow mb-1 text-amber">Recommended path</div>
-                  <p className="text-sm font-medium text-foreground">
-                    {useCase.recommendedPath}
-                  </p>
+                  <p className="text-sm font-medium text-foreground">{useCase.recommendedPath}</p>
                 </div>
                 <div>
                   <div className="editorial-eyebrow mb-1 text-amber">Recommended agent type</div>
@@ -198,7 +218,7 @@ function DecisionMini({
   note,
   tone,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   body: string;
   note: string;
@@ -207,25 +227,15 @@ function DecisionMini({
   return (
     <div
       className={`rounded-xl border p-4 ${
-        tone === "amber"
-          ? "border-amber/30 bg-amber/5"
-          : "border-border bg-background/30"
+        tone === "amber" ? "border-amber/30 bg-amber/5" : "border-border bg-background/30"
       }`}
     >
       <div className="flex items-center gap-1.5 mb-2">
-        <span className={tone === "amber" ? "text-amber" : "text-muted-foreground"}>
-          {icon}
-        </span>
-        <div
-          className={`editorial-eyebrow ${tone === "amber" ? "text-amber" : ""}`}
-        >
-          {title}
-        </div>
+        <span className={tone === "amber" ? "text-amber" : "text-muted-foreground"}>{icon}</span>
+        <div className={`editorial-eyebrow ${tone === "amber" ? "text-amber" : ""}`}>{title}</div>
       </div>
       <p className="text-xs text-foreground/90 leading-relaxed">{body}</p>
-      <p className="mt-2 text-[11px] text-muted-foreground italic leading-relaxed">
-        {note}
-      </p>
+      <p className="mt-2 text-[11px] text-muted-foreground italic leading-relaxed">{note}</p>
     </div>
   );
 }

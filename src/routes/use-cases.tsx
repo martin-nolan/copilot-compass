@@ -11,13 +11,13 @@ export const Route = createFileRoute("/use-cases")({
       {
         name: "description",
         content:
-          "Practical Copilot use cases — internal knowledge, training, workflows, support triage, dashboards, research.",
+          "Four practical Copilot use cases — internal knowledge, workflows, dashboard companions, and research.",
       },
       { property: "og:title", content: "Use Cases — Copilot Compass" },
       {
         property: "og:description",
         content:
-          "Realistic shapes for Copilot ideas with PoC, production, and React app fit notes.",
+          "Four realistic Copilot shapes with route recommendations, PoC notes, and production implications.",
       },
     ],
   }),
@@ -26,24 +26,31 @@ export const Route = createFileRoute("/use-cases")({
 
 function UseCasesPage() {
   const [openId, setOpenId] = useState<string | null>(null);
-  const open = useCases.find((u) => u.id === openId) ?? null;
+  const featured = useCases.filter((useCase) =>
+    [
+      "internal-knowledge",
+      "workflow-assistant",
+      "dashboard-companion",
+      "research-copilot",
+    ].includes(useCase.id),
+  );
+  const open = featured.find((u) => u.id === openId) ?? null;
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-20">
       <div className="max-w-2xl">
         <div className="editorial-eyebrow mb-4">Use Cases</div>
         <h1 className="text-4xl sm:text-5xl font-medium tracking-tight leading-tight">
-          Six shapes worth thinking through.
+          Four shapes worth thinking through.
         </h1>
         <p className="mt-4 text-muted-foreground leading-relaxed">
-          Each one is a small, realistic Copilot idea — with notes on the
-          recommended starting path and how the shape changes from PoC to
-          production.
+          Fewer examples, sharper distinctions. Each one shows the likely starting path and how the
+          shape changes from PoC to production.
         </p>
       </div>
 
       <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {useCases.map((u) => (
+        {featured.map((u) => (
           <UseCaseCard key={u.id} useCase={u} onOpen={setOpenId} />
         ))}
       </div>

@@ -11,16 +11,14 @@ export function UseCaseCard({ useCase, onOpen }: Props) {
   return (
     <button
       onClick={() => onOpen(useCase.id)}
-      className="premium-card group p-6 text-left h-full flex flex-col"
+      className="premium-card group p-6 text-left h-full flex flex-col focus-visible:ring-2 focus-visible:ring-amber/50 focus-visible:outline-none"
     >
       <div className="flex items-center justify-between mb-2">
         <div className="editorial-eyebrow">Use Case</div>
         <TagPill tone="outline">{useCase.recommendedAgentType}</TagPill>
       </div>
       <h3 className="text-lg font-medium text-foreground">{useCase.title}</h3>
-      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-        {useCase.summary}
-      </p>
+      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{useCase.summary}</p>
 
       <div className="mt-6 hairline" />
 
@@ -46,9 +44,7 @@ export function UseCaseCard({ useCase, onOpen }: Props) {
 function Fit({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-        {label}
-      </div>
+      <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
       <div className="mt-1">
         <TagPill tone="amber">{value}</TagPill>
       </div>

@@ -1,26 +1,25 @@
 import type { Decision } from "@/hooks/useDecisions";
 import { TagPill } from "./TagPill";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
+import { cn, renderSimpleMarkdown } from "@/lib/utils";
 
 type Props = {
   decision: Decision;
+  flags?: string[];
+  onEdit: (decision: Decision) => void;
   onDelete: (id: string) => void;
 };
 
-export function DecisionCard({ decision, onDelete }: Props) {
+export function DecisionCard({ decision, flags = [], onDelete, onEdit }: Props) {
   return (
     <article className="premium-card p-6">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="editorial-eyebrow mb-1.5">Decision</div>
-          <h3 className="text-lg font-medium tracking-tight">
-            {decision.ideaName}
-          </h3>
+          <h3 className="text-lg font-medium tracking-tight">{decision.ideaName}</h3>
           <div className="mt-2 flex flex-wrap gap-1.5">
             <TagPill tone="amber">{decision.chosenPath}</TagPill>
-            {decision.agentType && (
-              <TagPill tone="outline">{decision.agentType}</TagPill>
-            )}
+            {decision.agentType && <TagPill tone="outline">{decision.agentType}</TagPill>}
             {decision.mode && <TagPill tone="muted">{decision.mode}</TagPill>}
             {decision.reactRelevance && (
               <TagPill tone="muted">React: {decision.reactRelevance}</TagPill>
@@ -32,20 +31,35 @@ export function DecisionCard({ decision, onDelete }: Props) {
             ))}
           </div>
         </div>
-        <button
-          onClick={() => onDelete(decision.id)}
-          className="text-muted-foreground hover:text-destructive transition-colors p-1.5 rounded-md hover:bg-secondary"
-          aria-label="Delete decision"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => onEdit(decision)}
+            className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-amber/50 focus-visible:outline-none"
+            aria-label="Edit decision"
+          >
+            <Pencil className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => onDelete(decision.id)}
+            className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-destructive focus-visible:ring-2 focus-visible:ring-amber/50 focus-visible:outline-none"
+            aria-label="Delete decision"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
-      {decision.why && (
-        <p className="mt-4 text-sm text-foreground/90 leading-relaxed">
-          {decision.why}
-        </p>
+      {flags.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {flags.map((flag) => (
+            <TagPill key={flag} tone="amber">
+              {flag}
+            </TagPill>
+          ))}
+        </div>
       )}
+
+      {decision.why && <MarkdownBlock className="mt-4" value={decision.why} />}
 
       <div className="hairline my-5" />
 
@@ -77,9 +91,16 @@ function Block({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <div className="editorial-eyebrow mb-1.5">{label}</div>
-      <p className="text-sm text-foreground/85 leading-relaxed whitespace-pre-line">
-        {value}
-      </p>
+      <MarkdownBlock value={value} />
     </div>
+  );
+}
+
+function MarkdownBlock({ value, className }: { value: string; className?: string }) {
+  return (
+    <div
+      className={cn("space-y-2 text-sm text-foreground/85 leading-relaxed", className)}
+      dangerouslySetInnerHTML={{ __html: renderSimpleMarkdown(value) }}
+    />
   );
 }
