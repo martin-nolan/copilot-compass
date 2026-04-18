@@ -79,6 +79,22 @@ function WalkthroughPage() {
   const [showResult, setShowResult] = useState(false);
   const [copied, setCopied] = useState<"link" | "text" | null>(null);
   const total = walkthroughQuestions.length;
+  const choose = useCallback((questionId: string, optionId: string) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
+  }, []);
+
+  const next = useCallback(() => {
+    if (step < total - 1) {
+      setStep((current) => current + 1);
+      return;
+    }
+
+    const recommendation = recommend(answers);
+    saveRecommendation(recommendation, answers);
+    setCurrentPath(recommendation.pathId);
+    clearWalkthroughDraft();
+    setShowResult(true);
+  }, [answers, clearWalkthroughDraft, saveRecommendation, setCurrentPath, step, total]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -149,29 +165,13 @@ function WalkthroughPage() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [answers, next, showResult, step]);
+  }, [answers, choose, next, showResult, step]);
 
   const rec = useMemo(() => recommend(answers), [answers]);
   const question = walkthroughQuestions[step];
   const chosen = question ? answers[question.id] : undefined;
   const canNext = question ? !!chosen || question.optional : false;
   const progress = (Object.keys(answers).length / total) * 100;
-
-  const choose = (questionId: string, optionId: string) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
-  };
-
-  const next = useCallback(() => {
-    if (step < total - 1) {
-      setStep((current) => current + 1);
-      return;
-    }
-
-    saveRecommendation(rec, answers);
-    setCurrentPath(rec.pathId);
-    clearWalkthroughDraft();
-    setShowResult(true);
-  }, [answers, clearWalkthroughDraft, rec, saveRecommendation, setCurrentPath, step, total]);
 
   const skip = () => {
     if (!question?.optional) return;
