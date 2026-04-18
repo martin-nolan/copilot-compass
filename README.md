@@ -1,97 +1,93 @@
-# Copilot Pathways
+# 🧭 Copilot Compass
 
-A premium, dark-mode decision and learning hub for figuring out the right Microsoft Copilot path before you build.
+A premium, dark-mode **decision and learning hub** for navigating the Microsoft Copilot ecosystem — before you write a line of code.
 
-This is a **completely vibe-coded app built with Loveable**. It was created through iterative prompting, visual refinement, and product-shaping inside Loveable rather than through a traditional hand-coded engineering workflow.
+> Built with [Loveable](https://loveable.dev) through iterative prompting, visual refinement, and product-shaping — not a traditional hand-coded workflow.
+
+---
 
 ## What it is
 
-Copilot Pathways helps answer questions like:
+Copilot Compass helps answer the questions that come up every time you start a new Copilot idea:
 
 - Should this start in **Agent Builder** or **Copilot Studio**?
 - Is this a **low-code**, **structured low-code**, **React-led**, or **high-code** problem?
-- Is this really a **PoC**, or is it already drifting toward something more production-shaped?
+- Is this a **genuine PoC**, or is it already drifting toward something production-shaped?
 - What should I **learn next** for this route?
-- When is a **React app shell** justified?
-- When do I need more control over orchestration, tools, channels, or integrations?
+- When is a **React app shell** actually justified?
+- When do I need real control over orchestration, tools, channels, or integrations?
 
-It is designed as a **decision system first** and a **learning hub second**.
+The app is now shaped around **learning first, decisions second** — helping you build a mental model of the Copilot ecosystem, not just pick a path and move on.
 
-## What’s inside
+---
 
-The app includes:
+## Screens
 
-- **Choose a Path** — route selection across low-code, structured low-code, React-led, and high-code approaches
-- **Walkthrough** — an interactive decision tree to help determine the best route for an idea
-- **Learn** — concept-led modules covering Microsoft Copilot agents, declarative vs custom engine, Agent Builder, Copilot Studio, orchestration, tools, and more
-- **Compare** — side-by-side comparisons for major implementation choices
-- **Use Cases** — realistic product shapes with route recommendations
-- **Decisions** — a local-first notes area for saving route choices, next steps, and tradeoffs
+| Screen | Purpose |
+|---|---|
+| **Home** | Orientation and entry point |
+| **Choose a Path** | Route overview — low-code → high-code |
+| **Walkthrough** | Interactive decision tree for your idea |
+| **Learn** | Concept-led modules on agents, declarative vs custom engine, orchestration, tools & more |
+| **Compare** | Side-by-side breakdowns of major implementation choices |
+| **Use Cases** | Realistic product shapes with route recommendations |
+| **Decisions** | Local-first notes for saving your route, tradeoffs, and next steps |
 
-## Core product idea
+---
 
-This app is meant to be the go-to place for deciding:
+## Direction
 
-- **what path am I on?**
-- **what should I learn next?**
-- **what is the smartest first move?**
-- **when should I stay simple?**
-- **when should I move into something more capable?**
+The product started as a **decision hub** — a routing tool to help you pick the right Copilot path.
+
+It has since evolved into a **learning and decision companion**. The goal is now to:
+
+- Build a genuine mental model of the Microsoft Copilot ecosystem
+- Surface the tradeoffs and concepts that sit behind each route
+- Help you move from "I've heard of Agent Builder" to "I know when and why to use it"
+- Make the path from idea → correct approach as short as possible
+
+The decision flow still matters — but learning content is now a first-class part of the product.
+
+---
+
+## Philosophy
+
+This is not a docs mirror.  
+It is not a corporate LMS.  
+It is not an admin tool.
+
+It is a **premium decision and learning companion** for anyone exploring how to build with Microsoft Copilot.
+
+---
 
 ## Built with Loveable
 
 This project is intentionally and proudly **vibe-coded**.
 
-That means:
-- the product was shaped through prompting
-- the UI/UX was iterated conversationally
-- structure, flows, and content hierarchy were developed interactively
-- implementation was generated and refined in Loveable
+- Product was shaped through prompting
+- UI/UX was iterated conversationally
+- Structure, flows, and content hierarchy were developed interactively
+- Implementation was generated and refined inside Loveable
 
-This is not a traditionally engineered app from scratch.
-It is a product-thinking, design-led, AI-assisted build.
+This is a product-thinking, design-led, AI-assisted build — not a from-scratch engineering project.
 
-## Why
+---
 
-Microsoft’s Copilot ecosystem is powerful, but the choices can get fuzzy fast:
+## Tech
 
-- Agent Builder vs Copilot Studio
-- declarative vs custom engine
-- Microsoft-native vs custom React experience
-- quick PoC vs production-ready direction
+- **Framework:** React + TypeScript + Vite
+- **Styling:** TailwindCSS + shadcn/ui
+- **Deploy:** Cloudflare (Wrangler)
+- **Decisions storage:** Local-first (browser localStorage)
 
-Copilot Pathways exists to make those tradeoffs legible.
+---
 
-## Notes
+## Status
 
-- This app is currently designed as a **personal decision and learning hub**
-- The **Decisions** area is local-first
-- Saved decisions may be stored in browser local storage unless replaced by another persistence approach later
+Active concept build.
 
-## Repo status
-
-Early product build / concept stage.
-
-The current focus is:
-- refining the decision flow
-- improving learning UX
-- making route recommendations clearer
-- strengthening the interactive walkthrough
-
-## Screens / structure
-
-- Home
-- Choose a Path
-- Walkthrough
-- Learn
-- Compare
-- Use Cases
-- Decisions
-
-## Philosophy
-
-This is not a docs mirror.
-It is not a corporate LMS.
-It is not an admin tool.
-
-It is a **premium decision and learning companion** for exploring how to approach Copilot-based ideas.
+Current focus:
+- Strengthening learning content and module structure
+- Improving the interactive walkthrough
+- Refining route recommendations
+- Improving learning UX and content hierarchy
