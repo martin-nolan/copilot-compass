@@ -195,4 +195,12 @@
     color: var(--color-muted-foreground);
     font-weight: 500;
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }

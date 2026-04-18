@@ -11,13 +11,25 @@ export function DecisionCard({ decision, onDelete }: Props) {
   return (
     <article className="premium-card p-6">
       <div className="flex items-start justify-between gap-4">
-        <div>
+        <div className="min-w-0">
           <div className="editorial-eyebrow mb-1.5">Decision</div>
           <h3 className="text-lg font-medium tracking-tight">
             {decision.ideaName}
           </h3>
-          <div className="mt-2">
+          <div className="mt-2 flex flex-wrap gap-1.5">
             <TagPill tone="amber">{decision.chosenPath}</TagPill>
+            {decision.agentType && (
+              <TagPill tone="outline">{decision.agentType}</TagPill>
+            )}
+            {decision.mode && <TagPill tone="muted">{decision.mode}</TagPill>}
+            {decision.reactRelevance && (
+              <TagPill tone="muted">React: {decision.reactRelevance}</TagPill>
+            )}
+            {decision.tags?.slice(0, 3).map((t) => (
+              <TagPill key={t} tone="muted">
+                {t}
+              </TagPill>
+            ))}
           </div>
         </div>
         <button

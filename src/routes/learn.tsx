@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { learnChapters, learnModules } from "@/data/learnModules";
 import { LearnModuleCard } from "@/components/site/LearnModuleCard";
 
@@ -23,6 +24,25 @@ export const Route = createFileRoute("/learn")({
 });
 
 function LearnPage() {
+  const [activeId, setActiveId] = useState<string>(learnModules[0]?.id ?? "");
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActiveId(visible[0].target.id);
+      },
+      { rootMargin: "-20% 0px -60% 0px", threshold: 0 },
+    );
+    learnModules.forEach((m) => {
+      const el = document.getElementById(m.id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-20">
       <div className="max-w-2xl">
@@ -34,6 +54,8 @@ function LearnPage() {
           A concept-led tour of the Microsoft Copilot agent world — what
           declarative and custom engine actually mean, where Agent Builder ends
           and Copilot Studio begins, and how a React app fits around any of it.
+          Each module explains the concept first, then points at official
+          references.
         </p>
       </div>
 
@@ -52,16 +74,23 @@ function LearnPage() {
                       {ch.title}
                     </div>
                     <ul className="space-y-1.5 border-l border-border pl-3">
-                      {mods.map((m) => (
-                        <li key={m.id}>
-                          <a
-                            href={`#${m.id}`}
-                            className="text-muted-foreground hover:text-amber transition-colors text-xs leading-snug block"
-                          >
-                            {m.title}
-                          </a>
-                        </li>
-                      ))}
+                      {mods.map((m) => {
+                        const active = activeId === m.id;
+                        return (
+                          <li key={m.id}>
+                            <a
+                              href={`#${m.id}`}
+                              className={`block text-xs leading-snug transition-colors ${
+                                active
+                                  ? "text-amber"
+                                  : "text-muted-foreground hover:text-foreground"
+                              }`}
+                            >
+                              {m.title}
+                            </a>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 );
