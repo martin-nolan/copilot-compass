@@ -31,14 +31,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Copilot Compass — Choose the right Copilot path" },
+      { title: "Copilot Compass - Choose the right Copilot path" },
       {
         name: "description",
         content:
           "A premium personal field guide for Microsoft 365 Copilot, Copilot Studio, and React app integrations — for PoC and production decisions.",
       },
       { name: "author", content: "Copilot Compass" },
-      { property: "og:title", content: "Copilot Compass" },
+      { property: "og:title", content: "Copilot Compass - Choose the right Copilot path" },
       {
         property: "og:description",
         content:
@@ -46,6 +46,12 @@ export const Route = createRootRoute({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Copilot Compass - Choose the right Copilot path" },
+      { name: "description", content: "Copilot Compass is a decision and learning hub for navigating the Microsoft Copilot Agents ecosystem, helping teams choose the correct agent approach." },
+      { property: "og:description", content: "Copilot Compass is a decision and learning hub for navigating the Microsoft Copilot Agents ecosystem, helping teams choose the correct agent approach." },
+      { name: "twitter:description", content: "Copilot Compass is a decision and learning hub for navigating the Microsoft Copilot Agents ecosystem, helping teams choose the correct agent approach." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e0868a16-4520-435d-b88e-2c0f27a1e194/id-preview-7ee79c69--4c8dfcd2-0325-4d2b-a3a5-392366ac97f7.lovable.app-1776503838927.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e0868a16-4520-435d-b88e-2c0f27a1e194/id-preview-7ee79c69--4c8dfcd2-0325-4d2b-a3a5-392366ac97f7.lovable.app-1776503838927.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
